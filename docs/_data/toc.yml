@@ -1,0 +1,21 @@
+- title: Documentation
+  url: docs
+  links:
+    - title: "Getting Started"
+      url: "docs/getting-started"
+      children:
+        - title: Setup
+          url: "docs/getting-started#setup"
+        - title: Database
+          url: "docs/getting-started#database"
+        - title: Development
+          url: "docs/getting-started#development"
+    - title: "Usage"
+      url: "docs/usage"
+      children:
+        - title: Admin Interface
+          url: "docs/usage/admin"
+    - title: "About"
+      url: "about"
+    - title: "News"
+      url: "news"
