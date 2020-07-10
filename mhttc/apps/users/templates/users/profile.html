@@ -1,0 +1,60 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% load gravatar %}
+
+{% block content %}
+{% include "style/sliders.html" %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">
+<style>
+.btn-sm {
+  margin-top:20px !important;
+}
+.active {
+    font-weight:400;
+}
+
+.pill-button {
+    padding: 20px;
+    background-color: #F7F7F7;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.pill-button a {
+  color: #28a745 !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div style="float:right">
+            {% gravatar profile.email 100 %}</a>
+        </div>
+        <div>
+            {% include "users/_profile_settings.html" %}
+            {% if request.user.username == profile.username %}{% include "users/_profile_admin.html" %}{% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% include "messages/notification.html" %}
+<script src="{% static "js/cookie-token.js" %}"></script>
+<script>
+
+$(document).ready(function(){
+
+    $('a[href="#profile"]').tab('show');
+    $('.gravatar').addClass('thumbnail');
+    $("#delete_account").click(function(){
+        var response = confirm("Are you sure you want to delete your account?");
+        if (response == true) {
+           document.location = "{% url 'delete_account' %}";
+        }
+    })
+})
+</script>
+{% endblock %}

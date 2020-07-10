@@ -1,0 +1,21 @@
+      <div class="col-12 col-md-3 col-xl-2 ct-sidebar">
+        <nav class="collapse ct-links" id="ct-docs-nav">
+          <div class="ct-toc-item active">
+            <a class="ct-toc-link" href="{% url 'all_projects' %}">Projects</a>
+            <ul class="nav ct-sidenav">
+              <li class="{% if request.path == '/u/projects/'%}active{% endif %}">
+                <a href="{% url 'user_projects' %}">My Projects</a></li>
+              <li class="{% if request.path == '/projects/new/'%}active{% endif %}">
+                <a href="{% url 'new_project' %}">New Project</a></li>
+            </ul>
+          </div>
+          <!--Center-->
+          <div class="ct-toc-item active">
+            <a class="ct-toc-link" href="">Centers</a>
+            <ul class="nav ct-sidenav">
+              {% if request.user.center %}<li class="{% if request.path == '/u/center/'%}active{% endif %}">
+                <a href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">My Center</a></li>{% endif %}
+            </ul>
+        </nav>
+      </div>
+

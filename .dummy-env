@@ -3,3 +3,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 export TWITTER_USERNAME=MHTTCNetwork
 export INSTAGRAM_USERNAME=
 export FACEBOOK_USERNAME=
+export MYSQL_HOST=
+export MYSQL_USER=
+export MYSQL_PASSWORD=
+export MYSQL_DATABASE=

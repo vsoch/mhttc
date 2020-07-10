@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>{{ profile.username }}</h1>
+        {% if request.user.is_superuser %}<a target="_blank" href="{% url 'admin:index' %}"><button type="button" class="btn btn-sm btn-warning">Admin</button></a>{% endif %}
+        <hr style='margin-bottom:50px'>
+    </div>
+</div>
+
+{% if request.user.username == profile.username %}
+    {% if request.user.center %}<div class="row" style="padding-top:30px">
+        <div class="col-md-12">
+          <h3>Center</h3>
+          <p><small>This is the center that you are a member of.</small></p>
+        </div>
+    </div>
+    <div class="row">
+       <div class="col-md-12" style="padding-bottom:20px">
+         <a href="{% url 'center_details' user.center.id %}">{{ user.center.name }}</a>
+       </div>
+    </div>{% endif %}
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+          <h3>Password</h3>
+          <p><small>Please enter your current and a new password to change your password.</small></p>
+        </div>
+     </div>
+  <div class="row">
+     <div class="col-md-12">
+            <form method="POST" action="{% url 'change_password' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_old_password">Old password:</label>
+                    <input class="form-control" type="password" name="old_password" autocomplete="current-password" autofocus required id="id_old_password">
+                </div>
+                <div class="form-group">
+                    <label for="id_new_password1">New password:</label>
+                    <input class="form-control" type="password" name="new_password1" autocomplete="new-password" required id="id_new_password1">
+                </div>
+                <span class="helptext"><ul><li>Your password can’t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can’t be a commonly used password.</li><li>Your password can’t be entirely numeric.</li></ul></span>
+                <div class="form-group">
+                    <label for="id_new_password2">New password confirmation:</label>
+                    <input class="form-control" type="password" name="new_password2" autocomplete="new-password" required id="id_new_password2">
+                </div>
+{% if passwordform.errors %}
+    {% for field in passwordform %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in passwordform.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+                <button class="btn btn-primary" type="submit">Save changes</button>
+            </form>
+     </div>
+  </div>
+
+
+{% else %}
+    <div style="padding-top:20px" class="alert alert-info" role="alert">You aren't authorized to see this. Sneaky!</div>
+{% endif %}

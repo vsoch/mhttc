@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static "css/toastr.min.css" %}" media="screen" type="text/css">
+{% endblock %}
+{% include "messages/message.html" %}
+{% block nav %}
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      {% include "base/sidebar.html" %}
+      <!-- Table of Contents -->
+      <div class="d-none d-xl-block col-xl-2 ct-toc">
+        {% include "social/login-form.html" %}
+      </div>
+      <main class="col-12 col-md-8 col-xl-7 py-md-3 pl-md-5 ct-content" role="main">
+        <div class="container">{% include "messages/message.html" %}</div>
+      {% block content %}{% endblock %}
+      {% include "base/footer.html" %}
+      </main>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static "js/jquery.min.js"%}"></script>
+    <script src="{% static "js/toastr.min.js"%}"></script>
+{% endblock %}

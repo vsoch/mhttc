@@ -27,4 +27,27 @@ This is where you can add new centers, and update user metadata.
 This is also where you would add a new user, and also associate them to
 a center.
 
+ - [Adding a User](#add-a-user)
+
+<a id="adding-a-user">
+## 1. Adding a User
+
+When you browse to the `/admin` url (and there is also a link to it in your
+user profile) you first want to make sure that the Center for the user
+exists. If it doesn't, click the green ➕️ symbol under Users -> Center to add it
+first. Then when you are ready, click the green ➕️ under Users -> Users.
+You'll be taken to a list of users, and then you can click "Add User"
+to add a new one. You'll see a form like the following:
+
 ![admin-add-user.png]({{ site.baseurl }}/docs/usage/img/admin-add-user.png)
+
+The only required fields are:
+
+ - username (should be input as the email address)
+ - password
+ - center
+
+and you are suggested to also enter the email address under the email address field.
+
+And then the user can change his or her password on first login (and you should
+encourage them to).

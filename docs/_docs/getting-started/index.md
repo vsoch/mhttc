@@ -156,6 +156,23 @@ If you ever need to delete and refresh this local testing database, you can do:
 rm db.sqlite3
 ```
 
+For deployment, you'll need to first create your database in cloud managed sql,
+and export these environment variables in your local .env file:
+
+```
+export MYSQL_HOST=<the.hostname>
+export MYSQL_USER=<dbusername>
+export MYSQL_PASSWORD=<dbpassword>
+export MYSQL_DATABASE=<databasename>
+```
+
+And then at the onset of development, you'll need to both make and run migrations.
+
+```bash
+make migrate
+make migrations
+```
+
 ### Development
 
 To develop locally, you'll want to create a local environment and then install

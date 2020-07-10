@@ -1,0 +1,55 @@
+{% load static %}
+{% load gravatar %}
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+
+        <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+        <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+        <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+        <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}Mental Health Technology Health Transfer Network (MHTTC){% endblock %}</title>
+        <meta name="description" content="Mental Health Technology Health Transfer Network" />
+        <meta name="keywords" content="healthcare" />
+        <meta name="author" content="vsoch" />
+
+        <link rel="icon" type="image/ico" href="/static/img/favicon.ico"/>
+
+        <!-- Facebook and Twitter integration -->
+        <meta property="og:title" content="Mental Health Technology Health Transfer Network"/>
+        <meta property="og:image" content="{% static 'img/logo/logo.png' %}"/>
+        <meta property="og:url" content="{{ domain }}"/>
+        <meta property="og:site_name" content="Mental Health Technology Transfer Network"/>
+
+        <meta property="og:description" content="Mental Technology Transfer Network"/>
+        <meta name="twitter:title" content="Mental Health Technology Health Transfer Network (MHTTC)" />
+        <meta name="twitter:image" content="{% static 'img/logo/logo.png' %}" />
+        {% if TWITTER_USERNAME %}<meta name="twitter:url" content="https://www.twitter.com/{{ TWITTER_USERNAME }}" />{% endif %}
+        <meta name="twitter:card" content="summary" />
+
+        {% include "base/google_analytics.html" %}
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+        {% block fonts %}{% endblock %}
+
+        <link rel="stylesheet" href="{% static 'css/nucleo.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/all.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/argon.min.css' %}" type="text/css">
+        {% block css %}{% endblock %}
+        {% block head %}{% endblock %}
+    </head>
+
+    {% block body %}
+    <body class="docs">
+        
+    {% include "base/navigation.html" %}
+    {% block nav %}{% endblock %} 
+    {% include "base/scripts.html" %}
+    {% block scripts %}{% endblock %}
+
+    </body>
+    {% endblock %}
+</html>
