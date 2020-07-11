@@ -22,6 +22,29 @@ import os
 ################################################################################
 
 
+def get_instance(uid, Model):
+    """get a instance based on UID
+
+       Parameters
+       ==========
+       uid: the id of the instance
+    """
+    keyargs = {"id": uid}
+    try:
+        instance = Model.objects.get(**keyargs)
+    except Model.DoesNotExist:
+        instance = None
+    return instance
+
+
+def get_center(uid):
+    return get_instance(uid, Center)
+
+
+def get_user(uid):
+    return get_instance(uid, User)
+
+
 class CustomUserManager(BaseUserManager):
     """Create and save a User with the given username, email and password.
     """

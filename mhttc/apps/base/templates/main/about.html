@@ -1,0 +1,33 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <div class="row" style='margin-bottom:20px'>
+    <div class="col-md-12">
+      <h1>About the MHTTC Interweb</h1>
+      <p>For more information about this interweb, see the <a href="https://vsoch.github.io/mhttc/" target="_blank">project homepage</a></p>
+    </div>
+  </div>
+   <div class="row">
+    <div class="col-md-6">
+    <div style="border: 1px solid rgba(0,0,0,.125)">
+       <div class="card-body">
+           <h5 class="card-title">Software</h5>
+           <p class="card-text">
+             <p>If you have an issue with software, <a href="https://github.com/vsoch/mhttc/issues" target="_blank">tell us here</a></p>
+       </div>
+    </div>
+ </div>    
+<div class="col-md-6">
+    <div style="border: 1px solid rgba(0,0,0,.125)">
+       <div class="card-body">
+           <h5 class="card-title">Local Contact</h5>
+           <p class="card-text">
+             <p>If you need help, you can <a href="{% url 'contact' %}">contact us here</a>
+              {% if HELP_INSTITUTION_SITE %}, or visit <a href="{{ HELP_INSTITUTION_SITE }}">here</p>{% else %}.{% endif %}
+           </p>
+       </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<table class="table table-bordered" id="projects_table" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>{% if request.user.center == project.center %}
+            <th>Form Stage 1</th>
+            <th>Form Stage 2</th>
+            <th>Form Stage 3</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="{% url 'view_project_form' project.uuid %}">{{ project.name }}</a></td>
+            <td>{{ project.description | truncatechars:100 }}</td>{% if request.user.center == project.center %}
+            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning">Form Stage 1</button></a></td>
+            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage < 2 %}disabled{% endif %}>Form Stage 2</button></a></td>
+            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage < 3 %}disabled{% endif %}>Form Stage 3</button></a></td>{% endif %}
+        </tr>
+    </tbody>
+</table>
+

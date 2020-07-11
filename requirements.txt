@@ -3,3 +3,4 @@ PyMySQL==0.9.3
 django-extensions==3.0.2
 django-ratelimit==3.0.0
 django-gravatar2==1.4.4
+django-bootstrap-datepicker-plus==3.0.5

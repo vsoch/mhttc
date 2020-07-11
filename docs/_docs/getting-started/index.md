@@ -107,17 +107,26 @@ These last two are undefined by default and won't show on the site.
 
 Since we want to control login via invited email address, we are going to disable having a register form, and users
 are required to login with an email and password. An administrator is responsible for adding new users. 
-The login flow will be handled by the [python-social-auth](https://github.com/python-social-auth/social-core)
-module.
+
+
+#### Help Contact Email
+
+To provide users with a contact form, although the site uses SendGrid for more
+bulk emails, we use [formspree](https://formspree.io/) to drive the contact form, which better
+handles spam. You should export your `HELP_CONTACT_EMAIL` in the .env file as follows:
+
+```
+export HELP_CONTACT_EMAIL=myemail@domain.com
+```
 
 ### SendGrid Secrets
 
 To send PDFs (and other emails) from the server, we use SendGrid. This means
 that you need to [sign up](https://app.sendgrid.com/) for an account (the basic account with 100 emails
-per day is free) and then add the `SENDGRID_API_KEY` to your settings/config.py:
+per day is free) and then add the `SENDGRID_API_KEY` to your .env file:
 
 ```python
-SENDGRID_API_KEY=xxxxxxxxxxxxxxx
+export SENDGRID_API_KEY=xxxxxxxxxxxxxxx
 ```
 
 To create your key:

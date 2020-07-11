@@ -1,27 +1,8 @@
 {% extends "base/page.html" %}
 {% load static %}
 {% block content %}
-
-<table class="table table-bordered" id="{{ table_id }}" width="100%" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Estimated Temperature</th>
-            <th>Parent</th>
-            <th>Locate</th>
-        </tr>
-    </thead>
-    <tbody>{% for container in containers %}
-        <tr>
-            <td><a href="{{ container.get_absolute_url }}">{{ container.name }}</a></td>
-            <td>{{ container.description | truncatechars:100 }}</td>
-            <td>{{ container.container_type }}</td>
-            <td>{% if container.estimated_temperature %}{{ container.estimated_temperature }}{% endif %}</td>
-            <td>{% if container.parent %}<a href="{{ container.parent.get_absolute_url }}">{{ container.parent.name }}</a>{% endif %}</td>
-            <td><a href="{% url 'lab_map' %}?uuid={{ container.uuid }}"><button style="margin:0px" class="btn btn-sm btn-primary">Map</button></a></td>
-        </tr>{% endfor %}
-    </tbody>
-</table>
+<h1>Projects owned by {{ request.user.center.name }}</h1>
+<hr>
+{% if projects.count > 0 %}{% include "projects/projects_table.html" %}{% else %}
+<p class="alert alert-primary">The {{ request.user.center.name }} does not have any shared projects! <a style="float:right" href="{% url 'new_project' %}"><button class="btn btn-primary btn-sm" type="button">make a new project</button></a>.</p>{% endif %}
 {% endblock %}

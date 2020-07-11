@@ -1,0 +1,21 @@
+<table class="table table-bordered" id="trainings_table" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>{% for training in trainings %}
+        <tr>
+            <td><a href="{% url 'training_details' training.uuid %}">{{ training.name }}</a></td>
+            <td>{{ training.description | truncatechars:100 }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>{% endfor %}
+    </tbody>
+</table>
+

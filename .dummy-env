@@ -7,3 +7,5 @@ export MYSQL_HOST=
 export MYSQL_USER=
 export MYSQL_PASSWORD=
 export MYSQL_DATABASE=
+export SENDGRID_API_KEY=
+export HELP_CONTACT_EMAIL=

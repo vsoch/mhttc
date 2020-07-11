@@ -1,0 +1,72 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  {% include "messages/message.html" %}
+  <div class="row">
+    <div class="col-md-12" style="padding-bottom:20px">
+      <h1>{{ center.name }}</h1>
+      <h4>
+    </div>
+  </div>
+  {% if request.user.is_superuser and request.user.is_staff %}<div class="row" style="margin-bottom:20px">
+      <div class="col-md-12"><a href="{% url 'admin:users_center_change' center.id %}">
+          <button class="btn btn-primary">Edit</button></a>
+      </div>
+  </div>{% endif %}
+  <div class="row">
+    <div class="col-md-12">
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-details-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-details" aria-selected="true">Details</a>
+                {% if center.project_set.count > 0 %}<a class="nav-item nav-link" id="nav-projects-tab" data-toggle="tab" href="#nav-projects" role="tab" aria-controls="nav-projects" aria-selected="false">Projects</a>{% endif %}
+                {% if center.training_set.count > 0 %}<a class="nav-item nav-link" id="nav-training-tab" data-toggle="tab" href="#nav-training" role="tab" aria-controls="nav-training" aria-selected="false">Training</a>{% endif %}
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">
+	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
+	      <tr>
+	       <th>Key</th>
+	       <th>Value</th>
+	      </tr>
+	    </thead>
+	      <tbody>
+              <tr>
+                 <td>Name</td>
+                 <td>{{ center.name }}</td>
+              </tr>
+              <tr>
+                 <td>Updated At</td>
+                 <td>{{ center.updated_at }}</td>
+              </tr>
+              <tr>
+                 <td>Created At</td>
+                 <td>{{ center.created_at }}</td>
+              </tr>
+	    </tbody>
+	   </table>
+            </div>
+            {% if center.project_set.count > 0 %}<div class="tab-pane fade" id="nav-projects" role="tabpanel" aria-labelledby="nav-projects-tab">
+               {% include "projects/projects_table.html" with projects=center.project_set.all %}
+            </div>{% endif %}
+            {% if center.training_set.count > 0 %}<div class="tab-pane fade" id="nav-training" role="tabpanel" aria-labelledby="nav-training-tab">
+               {% include "training/trainings_table.html" with trainings=center.training_set.all %}
+            </div>{% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block pagescripts %}
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#center-table').DataTable();
+  {% if center.projects.count > 0 %}$('#projects-table').DataTable();{% endif %}
+  {% if center.trainings.count > 0 %}$('#trainings-table').DataTable();{% endif %}
+});
+</script>
+{% endblock %}

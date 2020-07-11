@@ -17,12 +17,16 @@ urlpatterns = [
     path("projects/", views.all_projects, name="all_projects"),
     path("u/projects/", views.user_projects, name="user_projects"),
     path("projects/new/", views.new_project, name="new_project"),
-    path("project/<int:uuid>/?", views.project_details, name="project_details"),
+    path("project/<uuid:uuid>/", views.project_details, name="project_details"),
+    path(
+        "project/forms/<uuid:uuid>/<int:stage>/edit",
+        views.edit_form_template,
+        name="edit_form_template",
+    ),
+    path(
+        "project/forms/<uuid:uuid>/", views.view_project_form, name="view_project_form"
+    ),
+    path("training/new/", views.new_training, name="new_training"),
+    path("training/<uuid:uuid>/", views.training_details, name="training_details"),
+    path("center/training/", views.center_training, name="center_training"),
 ]
-
-# urlpatterns = [
-#    path('', views.IndexView.as_view(), name='index'),
-#    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
-#    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-#    path('<int:question_id>/vote/', views.vote, name='vote'),
-# ]

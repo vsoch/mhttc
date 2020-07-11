@@ -14,6 +14,56 @@ from django.urls import reverse
 import uuid
 
 
+class Training(models.Model):
+    """A training holds one or more participants and a certificate template to give
+       on completion
+    """
+
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    # Why do these fields use time, and others use date (e.g., see ip_check*)
+    time_created = models.DateTimeField("date created", auto_now_add=True)
+    time_updated = models.DateTimeField("date modified", auto_now=True)
+    name = models.CharField(max_length=250, blank=False)
+    description = models.CharField(max_length=500, blank=True, null=True)
+
+    # A project must be owned by a center, and the contact must be a user
+    center = models.ForeignKey("users.Center", on_delete=models.PROTECT, blank=False)
+    contact = models.ForeignKey("users.User", on_delete=models.PROTECT, blank=False)
+
+    def get_absolute_url(self):
+        return reverse("training_details", args=[self.uuid])
+
+    def get_label(self):
+        return "training"
+
+    class Meta:
+        app_label = "main"
+
+
+class TrainingParticipant(models.Model):
+    """A training participant is an email address (and status?) to indicate
+       the status for a participant.
+    """
+
+    name = models.CharField(max_length=250, blank=False)
+    email = models.CharField(max_length=100, blank=True, null=True)
+    training = models.ForeignKey("main.Training", on_delete=models.PROTECT, blank=False)
+    completed = models.BooleanField(
+        default=False, help_text="Has the participant completed the training?"
+    )
+
+    def get_absolute_url(self):
+        return reverse("participant_details", args=[self.uuid])
+
+    def get_label(self):
+        return "training_participant"
+
+    class Meta:
+        app_label = "main"
+        unique_together = [["email", "completed"]]
+
+
 class Project(models.Model):
     """A project is owned by a center, and includes one or more form templates.
     """
@@ -25,6 +75,7 @@ class Project(models.Model):
     time_updated = models.DateTimeField("date modified", auto_now=True)
     name = models.CharField(max_length=250, blank=False)
     description = models.CharField(max_length=500, blank=True, null=True)
+    stage = models.PositiveIntegerField(default=1)
 
     # Manage project forms
     form = models.ForeignKey(

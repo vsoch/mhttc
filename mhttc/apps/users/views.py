@@ -32,6 +32,8 @@ from ratelimit.decorators import ratelimit
 from social_core.exceptions import AuthForbidden
 from django.utils import timezone
 
+## Centers
+
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @user_agree_terms
@@ -41,10 +43,34 @@ def center_details(request, uuid):
     try:
         center = Center.objects.get(id=uuid)
         return render(
-            request, "details/center_details.html", context={"center": center}
+            request, "centers/center_details.html", context={"center": center}
         )
     except Center.DoesNotExist:
         raise Http404
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def user_center(request):
+    """Return a user listing of projects
+    """
+    if request.user.center:
+        return redirect("center_details", request.user.center.id)
+    messages.warning(request, "You do not belong to a center.")
+    return redirect("index")
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def all_centers(request, projects=None):
+    if centers is None:
+        centers = Center.objects.all()
+    return render(request, "centers/all_centers.html", context={"centers": centers})
+
+
+## Users
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)

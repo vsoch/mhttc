@@ -1,0 +1,22 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block content %}
+
+<h1>Training for {{ center.name }}</h1>
+<hr>
+<table class="table table-bordered" id="center-trining" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Contact</th>
+        </tr>
+    </thead>
+    <tbody>{% for training in events %}<tr>
+            <td>{{ training.name }}</td>
+            <td>{{ training.description | truncatechars:100 }}</td>
+            <td><a href="mailto:{{ training.contact.email }}">{{ training.contact.email }}</a></td>
+        </tr>{% endfor %}
+    </tbody>
+</table>
+{% endblock %}
