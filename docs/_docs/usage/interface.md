@@ -51,12 +51,8 @@ and easy access to projects and trainings
 
 <br>
 
-And each center can have one or more training events (these events are the ones
+Each center can have one or more training events (these events are the ones
 that will have associated certificates for participants to download).
-
-<br>
-
-![interface-training.png]({{ site.baseurl }}/docs/usage/img/interface-training.png)
 
 <br>
 

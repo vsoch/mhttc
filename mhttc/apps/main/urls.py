@@ -26,6 +26,7 @@ urlpatterns = [
     path(
         "project/forms/<uuid:uuid>/", views.view_project_form, name="view_project_form"
     ),
+    # Training
     path("training/new/", views.new_training, name="new_training"),
     path("training/<uuid:uuid>/", views.training_details, name="training_details"),
     path("center/training/", views.center_training, name="center_training"),
