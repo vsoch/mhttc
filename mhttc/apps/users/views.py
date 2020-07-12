@@ -10,11 +10,13 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from mhttc.apps.users.models import Center, User
 from mhttc.apps.users.decorators import user_agree_terms
+from mhttc.apps.users.utils import generate_random_password, send_email
 from mhttc.settings import (
     VIEW_RATE_LIMIT as rl_rate,
     VIEW_RATE_LIMIT_BLOCK as rl_block,
 )
 
+from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import (
@@ -64,13 +66,72 @@ def user_center(request):
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @login_required
 @user_agree_terms
-def all_centers(request, projects=None):
+def all_centers(request, centers=None):
     if centers is None:
-        centers = Center.objects.all()
+        centers = Center.objects.all().order_by("name")
     return render(request, "centers/all_centers.html", context={"centers": centers})
 
 
 ## Users
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def invited_user(request):
+    """The view for an invited user to set their password and enable account.
+    """
+    # TODO need to write this view
+    # ask user to re-set password
+    # make user active
+    # confirm uuid is matching
+    pass
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def invite_users(request):
+    """Create new users based on email, and invite them to their accounts.
+    """
+    if not request.user.is_superuser:
+        messages.warning(request, "You are not allowed to perform this action")
+        redirect("index")
+
+    if request.method == "POST":
+        emails = request.POST.get("emails")
+        resend_invite = request.POST.get("resend_invite") == "on"
+        for email in emails.split("\n"):
+
+            # Any weird newlines
+            email = email.strip()
+
+            # We create users with emails as username
+            user, created = User.objects.get_or_create(username=email, email=email)
+
+            # If we resend an invite, we generate a new password
+            if created and resend_invite or not created:
+                user.active = False
+                password = generate_random_password()
+                user.set_password(password)
+                user.save()
+                url = reverse("invited_user", args=[user.uuid])
+                message = (
+                    "You've been invited to join the Mental Health Technology Transfer Network!\n"
+                    "You can login with the following username and password at %s:\n\nUsername: %s\nPassword: %s\n\n"
+                    "If this message was in error, please respond to this email and let us know."
+                    % (url, user.username, password)
+                )
+
+                message = send_email(
+                    email_to=email,
+                    message=message,
+                    subject="[MHTTC] Your are invited to join the Mental Health Technology Transfer Network",
+                )
+                messages.info(request, message)
+
+    return render(request, "users/invite_users.html")
+
+
+## Account Creation and Manamgent
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)

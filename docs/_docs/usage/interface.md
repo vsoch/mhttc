@@ -13,6 +13,35 @@ login form.
 
 ![interface-index.png]({{ site.baseurl }}/docs/usage/img/interface-index.png)
 
+
+## Users
+
+By default, a user cannot make their own account. An administrative user
+should go to their Profile and under Admin settings, enter a list of emails
+to send invitations to:
+
+TODO MAKE THIS VIEW CREATE IMAGE
+
+The users are then notified via email with an email login and temporary password.
+By way of doing this via email we also verify the email address.
+
+TODO TAKE PICTURE OF EMAIL
+
+At the onset of logging in, the user is first asked to agree to the privacy policy
+and terms of service. 
+
+<br>
+
+![interface-terms.png]({{ site.baseurl }}/docs/usage/img/interface-terms.png)
+
+<br>
+
+These terms are always available via a link in the footer. The content itself
+is maintained in a Google Document so updating it doesn't require updating the 
+site itself.
+
+![interface-terms-full.png]({{ site.baseurl }}/docs/usage/img/interface-terms-full.png)
+
 <br>
 
 Once the user has logged in, the login panel changes to a user settings panel.
@@ -35,7 +64,17 @@ The user profile looks like this:
 
 ## Centers
 
-Each center has a basic page with information
+There is a main listing of centers, which doesn't serve much use other than to
+show what exists:
+
+<br>
+
+![interface-centers.png]({{ site.baseurl }}/docs/usage/img/interface-centers.png)
+
+<br>
+
+
+Each center has a basic page with information (what might be useful to add here?)
 
 <br>
 

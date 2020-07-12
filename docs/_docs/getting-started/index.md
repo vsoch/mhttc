@@ -119,7 +119,19 @@ handles spam. You should export your `HELP_CONTACT_EMAIL` in the .env file as fo
 export HELP_CONTACT_EMAIL=myemail@domain.com
 ```
 
+
 ### SendGrid Secrets
+
+#### Help Contact Email
+
+You'll need this same `HELP_CONTACT_EMAIL` exported in your .env file in order to use
+SendGrid:
+
+```
+export HELP_CONTACT_EMAIL=myemail@domain.com
+```
+
+#### SendGrid
 
 To send PDFs (and other emails) from the server, we use SendGrid. This means
 that you need to [sign up](https://app.sendgrid.com/) for an account (the basic account with 100 emails
@@ -216,6 +228,29 @@ make migrations
 make migrate
 ```
 
+You also might want to generate the list of initial centers:
+
+```bash
+$ python manage.py create_centers
+Creating Centers:
+
+Creating center MHTTC Network Coordinating Office
+Creating center National American Indian & Alaska Native MHTTC
+Creating center National Hispanic & Latino MHTTC
+Creating center New England MHTTC
+Creating center Northeast & Caribbean MHTTC
+Creating center Central East MHTTC
+Creating center Southeast MHTTC
+Creating center Great Lakes MHTTC
+Creating center South Southwest MHTTC
+Creating center Mid-America MHTTC
+Creating center Mountain Plains MHTTC
+Creating center Pacific Southwest MHTTC
+Creating center Northwest MHTTC
+There are a total of 14 centers.
+```
+
+If you need to edit this list, they are in the file at [create_centers.py](https://github.com/vsoch/mhttc/blob/master/mhttc/apps/users/management/commands/create_centers.py) in the users management comands.
 And then we would typically use the `manage.py` to run the server.
 
 ```bash

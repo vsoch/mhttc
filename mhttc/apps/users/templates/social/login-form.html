@@ -19,6 +19,7 @@
 <h3>Hello, {{ user.username }}</h3>
 <ul class="section-nav">
   {% if user.center %}<li class="toc-entry toc-h3"><a href="{% url 'center_details' user.center.id %}">{{ user.center.name }}</a></li>{% endif %}
+  {% if request.user.is_superuser %}<li class="toc-entry toc-h3"><a href="{% url 'invite_users' %}">Invite Users</a></li>{% endif %}
   <li class="toc-entry toc-h3"><a href="{% url 'profile' %}">Profile</a></li>
   <li class="toc-entry toc-h3"><a href="{% url 'logout' %}">Logout</a></li>
 </ul>

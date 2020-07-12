@@ -4,3 +4,5 @@ django-extensions==3.0.2
 django-ratelimit==3.0.0
 django-gravatar2==1.4.4
 django-bootstrap-datepicker-plus==3.0.5
+reportlab==3.5.44
+sendgrid==6.4.3

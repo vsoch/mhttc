@@ -1,0 +1,22 @@
+{% extends "base/page.html" %}
+{% load static %}
+
+{% block title %}Invite Users{% endblock %}
+{% block content %}
+
+<h1>Invite Users</h1>
+<hr>
+<form method="POST" class="post-form">
+ {% csrf_token %}
+  <label for="emails">Emails:</label>
+  <textarea name="emails" cols="40" rows="10" class="form-control" required id="emails">
+  </textarea> 
+  <span class="helptext">Please copy paste emalis (one per line) that you would like to send invitations for.</span></p>
+
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" name="resend_invite" id="resend_invite">
+    <label class="custom-control-label" for="resend_invite">If a user was already invited, the invitation should be resent.</label>
+  </div>
+  <button style="margin-top:30px" type="submit" class="save btn btn-default">Invite</button>
+</form>
+{% endblock %}

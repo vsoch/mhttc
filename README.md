@@ -8,6 +8,11 @@ This is a template that will get you started to deploy a Flask application
 on [Google App Engine](https://cloud.google.com/appengine/docs/standard/python3/building-app/writing-web-service)! 
 See the [documentation](https://vsoch.github.io/mhttc) to get started.
 
+## Questions and TODO
+
+ - what information should go on the front page?
+ - does other centers (with only access to projects) mean no access to training resources?
+ - is the project template consistent across centers?
 
 ## Thanks
 

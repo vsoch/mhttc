@@ -1,44 +1,25 @@
+{% load static %}
 <footer class="container" style="margin-top:100px">
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
           <ul class="list-inline mb-2">
             <li class="list-inline-item">
-              <a href="{% url 'about' %}">About</a>
+              <a style="color:#00467f" href="{% url 'about' %}">About</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-              <a href="{% url 'contact' %}">Contact</a>
+              <a style="color:#00467f" href="{% url 'contact' %}">Contact</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-              <a href="" target="_blank">Terms of Use</a>
-            </li>
-            <li class="list-inline-item">&sdot;</li>
-            <li class="list-inline-item">
-              <a href="" target="_blank">Privacy Policy</a>
+              <a style="color:#00467f" href="{% url 'terms' %}" target="_blank">Terms of Use / Privacy Policy</a>
             </li>
           </ul>
           <p class="text-muted small mb-4 mb-lg-0">&copy; MHTTC 2020. All Rights Reserved.</p>
         </div>
         <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
-          <ul class="list-inline mb-0">
-            <li class="list-inline-item mr-3">
-              <a href="https://www.github.com/vsoch/mhttc">
-                <i class="fab fa-github fa-fw"></i>
-              </a>
-            </li>{% if TWITTER_USERNAME %}
-            <li class="list-inline-item mr-3">
-              <a href="https://www.twitter.com/{{ TWITTER_USERNAME }}">
-                <i class="fab fa-twitter-square fa-fw"></i>
-              </a>
-            </li>{% endif %}
-            <li class="list-inline-item">
-              <a href="https://mhttcnetwork.org/">
-                <i class="fas fa-home fa-fw"></i>
-              </a>
-            </li>
-          </ul>
+          <img src="{% static 'img/samhsa-dark.png' %}" style="width:150px; margin-bottom:10px">
         </div>
       </div>
     </div>

@@ -25,9 +25,12 @@ urlpatterns = [
     url(r"^u/delete$", views.delete_account, name="delete_account"),  # delete account
     url(r"^u/profile", views.view_profile, name="profile"),
     # Centers
-    path("center/<str:uuid>/", views.center_details, name="center_details"),
+    path("center/<int:uuid>/", views.center_details, name="center_details"),
     path("centers/", views.all_centers, name="all_centers"),
     path("u/center/", views.user_center, name="user_center"),
+    # Users
+    path("u/invite/", views.invite_users, name="invite_users"),
+    path("u/invite/<uuid:uuid>", views.invited_user, name="invited_user"),
     # We don't currently have a reason for one user to see another user's account
     # url(r'^(?P<username>[A-Za-z0-9@/./+/-/_]+)/$',views.view_profile,name="profile"),
 ]

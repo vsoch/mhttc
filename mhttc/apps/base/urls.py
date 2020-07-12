@@ -15,10 +15,9 @@ import mhttc.apps.base.views as views
 urlpatterns = [
     url(r"^$", views.index_view, name="index"),
     url(r"^about/?$", views.about_view, name="about"),
-    url(r"^dashboard/?$", views.dashboard_view, name="dashboard"),
     url(r"^contact/?$", views.contact_view, name="contact"),
     url(r"^terms/?$", views.terms_view, name="terms"),
-    url(r"^privacy-policy/?$", views.privacy_view, name="privacy-policy"),
+    url(r"^privacy-policy/?$", views.terms_view, name="privacy-policy"),
     url(r"^search/?$", views.search_view, name="search"),
     url(r"^searching/?$", views.run_search, name="running_search"),
     url(r"^search/(?P<query>.+?)/?$", views.search_view, name="search_query"),

@@ -12,10 +12,12 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 from django.db import models
 
 import os
+import uuid
 
 ################################################################################
 # Supporting Functions
@@ -90,6 +92,9 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
     active = models.BooleanField(default=True)
+
+    # A temporary uuid that allows them to access their personal invitation
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     # A center is required
     center = models.ForeignKey(
@@ -190,7 +195,7 @@ class Center(models.Model):
         return False
 
     def get_absolute_url(self):
-        return reverse("team_details", args=[str(self.id)])
+        return reverse("center_details", args=[str(self.id)])
 
     def has_member(self, username):
         """return True if the username is either a member or owner for the team

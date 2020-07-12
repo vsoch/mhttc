@@ -50,25 +50,6 @@ def terms_view(request):
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
-def privacy_view(request):
-    return render(request, "terms/privacy_agreement.html")
-
-
-@ratelimit(key="ip", rate=rl_rate, block=rl_block)
-def dashboard_view(request):
-    """Show the logged in regular user their orders, or an admin/staff
-       all orders. Also show stats for the node, not including Schema.
-    """
-    context = {}
-
-    # Counts go into the bar chart, should be scaled similarity
-    context["counts"] = {
-        "projects": Project.objects.count(),
-    }
-    return render(request, "main/dashboard.html", context)
-
-
-@ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def contact_view(request):
     return render(request, "main/contact.html")
 

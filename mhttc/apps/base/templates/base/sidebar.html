@@ -11,7 +11,7 @@
           </div>
           <!--Center-->
           <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="">Centers</a>
+            <a class="ct-toc-link" href="{% url 'all_centers' %}">Centers</a>
             <ul class="nav ct-sidenav">
               {% if request.user.center %}<li class="{% if request.path == '/u/center/'%}active{% endif %}">
                 <a href="{% url 'user_center' %}">My Center</a></li>
