@@ -94,7 +94,7 @@ class User(AbstractUser):
     active = models.BooleanField(default=True)
 
     # A temporary uuid that allows them to access their personal invitation
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uuid.uuid4)
 
     # A center is required
     center = models.ForeignKey(

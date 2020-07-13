@@ -14,6 +14,7 @@ from mhttc.apps.users.utils import generate_random_password, send_email
 from mhttc.settings import (
     VIEW_RATE_LIMIT as rl_rate,
     VIEW_RATE_LIMIT_BLOCK as rl_block,
+    DOMAIN_NAME,
 )
 
 from django.urls import reverse
@@ -29,10 +30,12 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
 from django.shortcuts import get_object_or_404, render, redirect
 from ratelimit.decorators import ratelimit
 from social_core.exceptions import AuthForbidden
 from django.utils import timezone
+from uuid import uuid4
 
 ## Centers
 
@@ -73,17 +76,58 @@ def all_centers(request, centers=None):
 
 
 ## Users
+
+
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
-@login_required
-@user_agree_terms
-def invited_user(request):
+def invited_user(request, uuid):
     """The view for an invited user to set their password and enable account.
     """
-    # TODO need to write this view
-    # ask user to re-set password
-    # make user active
-    # confirm uuid is matching
-    pass
+    if request.method == "POST":
+        email = request.POST.get("email")
+        center = request.POST.get("center")
+        password = request.POST.get("password")
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+
+        if not email or not password or not password1 or not password2 or not center:
+            messages.warning(request, "Please fill in all fields.")
+        elif password1 != password2:
+            messages.warning(request, "Passwords do not match.")
+        else:
+            try:
+                user = User.objects.get(username=email, email=email)
+            except User.DoesNotExist:
+                messages.warning(request, "%s does not exist." % email)
+                return render(request, "users/invited_user.html")
+
+            # Get the center
+            try:
+                center = Center.objects.get(id=center)
+            except Center.DoesNotExist:
+                messages.warning(request, "This center does not exist.")
+                return render(request, "users/invited_user.html")
+
+            # Verify the unique id
+            if uuid != user.uuid:
+                messages.warning(request, "This link is no longer valid.")
+                return render(request, "users/invited_user.html")
+
+            # Now authenticate with previous password
+            user = authenticate(username=email, password=password)
+            if user is None:
+                messages.warning(request, "Invalid user email or password.")
+                return render(request, "users/invited_user.html")
+
+            # Update user password, and activate
+            user.set_password(password1)
+            user.uuid = uuid4()
+            user.active = True
+            user.save()
+            auth_login(request, user)
+            messages.info(request, f"You are now logged in as {user.username}")
+            return redirect("/")
+
+    return render(request, "users/invited_user.html", {"centers": Center.objects.all()})
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
@@ -99,10 +143,16 @@ def invite_users(request):
     if request.method == "POST":
         emails = request.POST.get("emails")
         resend_invite = request.POST.get("resend_invite") == "on"
+        success_count = 0
+        total_count = 0
         for email in emails.split("\n"):
 
             # Any weird newlines
             email = email.strip()
+
+            # Skip empty lines
+            if not email:
+                continue
 
             # We create users with emails as username
             user, created = User.objects.get_or_create(username=email, email=email)
@@ -113,21 +163,25 @@ def invite_users(request):
                 password = generate_random_password()
                 user.set_password(password)
                 user.save()
-                url = reverse("invited_user", args=[user.uuid])
+                url = "%s%s" % (DOMAIN_NAME, reverse("invited_user", args=[user.uuid]))
                 message = (
                     "You've been invited to join the Mental Health Technology Transfer Network!\n"
-                    "You can login with the following username and password at %s:\n\nUsername: %s\nPassword: %s\n\n"
+                    "You can login with the following username and password at %s :\n\nUsername: %s\nPassword: %s\n\n"
                     "If this message was in error, please respond to this email and let us know."
                     % (url, user.username, password)
                 )
-
-                message = send_email(
+                if send_email(
+                    request=request,
                     email_to=email,
                     message=message,
                     subject="[MHTTC] Your are invited to join the Mental Health Technology Transfer Network",
-                )
-                messages.info(request, message)
+                ):
+                    success_count += 1
+                total_count += 1
 
+        messages.info(
+            request, "Successfully invited %s/%s users." % (success_count, total_count)
+        )
     return render(request, "users/invite_users.html")
 
 

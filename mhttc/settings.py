@@ -22,8 +22,9 @@ FACEBOOK_USERNAME = os.environ.get("FACEBOOK_USERNAME")
 # SendGrid and Help Contact Email
 HELP_CONTACT_EMAIL = os.environ.get("HELP_CONTACT_EMAIL")
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+SENDGRID_SENDER_EMAIL = os.environ.get("SENDGRID_SENDER_EMAIL", HELP_CONTACT_EMAIL)
 
-DOMAIN_NAME = "http://127.0.0.1"
+DOMAIN_NAME = "http://127.0.0.1:8000"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = DOMAIN_NAME
 
 # Quick-start development settings - unsuitable for production

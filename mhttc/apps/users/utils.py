@@ -11,11 +11,15 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import string
 import random
 
-from mhttc.settings import SENDGRID_API_KEY, HELP_CONTACT_EMAIL
+from mhttc.settings import SENDGRID_API_KEY, SENDGRID_SENDER_EMAIL
+from django.contrib import messages
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail,
+    Email,
+    To,
+    Content,
     Attachment,
     FileContent,
     FileName,
@@ -31,6 +35,7 @@ import urllib.request as urllib
 
 
 def send_email(
+    request,
     email_to,
     message,
     subject,
@@ -49,14 +54,19 @@ def send_email(
        subject: the email subject
        attachment: the attachment file on the server
     """
-    if not SENDGRID_API_KEY or not HELP_CONTACT_EMAIL:
-        return "SendGrid secrets were not found in the environment. Please see https://vsoch.github.io/mhttc/docs/getting-started/#sendgrid-secrets"
+    print(SENDGRID_SENDER_EMAIL)
+    if not SENDGRID_API_KEY or not SENDGRID_SENDER_EMAIL:
+        messages.warning(
+            request,
+            "SendGrid secrets were not found in the environment. Please see https://vsoch.github.io/mhttc/docs/getting-started/#sendgrid-secrets",
+        )
+        return False
 
-    message = Mail(
-        from_email=HELP_CONTACT_EMAIL,
-        to_emails=email_to,
-        subject=subject,
-        html_content=message,
+    mail = Mail(
+        Email(SENDGRID_SENDER_EMAIL),
+        To(email_to),
+        subject,
+        Content("text/plain", message),
     )
 
     # If the user has provided an attachment, add it
@@ -66,12 +76,14 @@ def send_email(
         )
 
     try:
-        client = SendGridAPIClient(SENDGRID_API_KEY)
-        response = client.send(message)
+        sg = SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        response = sg.client.mail.send.post(request_body=mail.get())
         print(response.status_code)
         print(response.headers)
+        return True
     except Exception as e:
         print(e.message)
+        return False
 
 
 def generate_attachment(filepath, filetype="application/pdf", filename=None):
@@ -107,6 +119,6 @@ def generate_attachment(filepath, filetype="application/pdf", filename=None):
 def generate_random_password(length=10):
     """Generate a random password with letters, numbers, and special characters
     """
-    password_characters = string.ascii_letters + string.digits + string.punctuation
+    password_characters = string.ascii_letters + string.digits
     password = "".join(random.choice(password_characters) for i in range(length))
     return password

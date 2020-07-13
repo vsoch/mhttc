@@ -33,11 +33,15 @@
         </li>
       </ul>
     </div>
-    <form style="margin-top: 20px;" method="GET" action="https://mhttcnetwork.org/search/node" target="_blank">
+    {% if request.user.is_authenticated %}<form style="margin-top: 20px;" method="GET" action="{% url 'search' %}">
+      <div class="form-group">
+        <input class="form-control form-control-sm" type="text" name="q" value="" placeholder="Search..." id="search-input">
+      </div>
+    </form>{% else %}<form style="margin-top: 20px;" method="GET" action="https://mhttcnetwork.org/search/node" target="_blank">
       <div class="form-group">
         <input class="form-control form-control-sm" type="text" name="keys" value="" placeholder="Search MHTTC org..." id="search-input">
       </div>
-    </form>
+    </form>{% endif %}
     <button class="navbar-toggler ct-search-docs-toggle d-block d-md-none ml-auto ml-sm-0" type="button" data-toggle="collapse" data-target="#ct-docs-nav" aria-controls="ct-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

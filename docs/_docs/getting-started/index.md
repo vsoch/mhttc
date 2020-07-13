@@ -122,14 +122,21 @@ export HELP_CONTACT_EMAIL=myemail@domain.com
 
 ### SendGrid Secrets
 
-#### Help Contact Email
+We use SendGrid to invite users to the site. Note that the emails can sometimes
+end up in spam, so you should be prepared to notify invitees of this.
 
-You'll need this same `HELP_CONTACT_EMAIL` exported in your .env file in order to use
+#### SendGrid Sender Email
+
+You'll need a `SENDGRID_SENDER_EMAIL` exported in your .env file in order to use
 SendGrid:
 
 ```
-export HELP_CONTACT_EMAIL=myemail@domain.com
+export SENDGRID_SENDER_EMAIL=myemail@domain.com
 ```
+
+If this is the same as your `HELP_CONTACT_EMAIL` you can leave it blank, and the help
+contact email will be used. **Important** before using the API this email needs to be added as a known [Sender](https://app.sendgrid.com/settings/sender_auth/senders). If it is not, you will get a permission denied error. You
+also likely want to go to Settings -> Tracking and disable link tracking in email.
 
 #### SendGrid
 
@@ -141,7 +148,7 @@ per day is free) and then add the `SENDGRID_API_KEY` to your .env file:
 export SENDGRID_API_KEY=xxxxxxxxxxxxxxx
 ```
 
-To create your key:
+Then to create your key:
 
  1. Go to [SendGrid](https://app.sendgrid.com/) and click on Settings -> Api keys in the left bar
  2. Click the blue button to "Create API key"

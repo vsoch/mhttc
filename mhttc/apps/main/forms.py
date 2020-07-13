@@ -40,6 +40,8 @@ class TrainingForm(forms.ModelForm):
 
 
 class FormTemplateForm(forms.ModelForm):
+    stage = 1
+
     class Meta:
         model = FormTemplate
         widgets = {
@@ -79,6 +81,20 @@ class FormTemplateForm(forms.ModelForm):
             "results_other",
         )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        print(cleaned_data)
+        print(self.stage)
+
+        # cc_myself = cleaned_data.get("cc_myself")
+        # subject = cleaned_data.get("subject")
+
+        # if cc_myself and subject:
+
+    #                raise ValidationError(
+    #                   "Did not send for 'help' in the subject despite "
+    #                  "CC'ing yourself."
+    #             )
     def __init__(self, *args, **kwargs):
         super(FormTemplateForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():

@@ -14,6 +14,7 @@ from ratelimit.decorators import ratelimit
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.forms.models import model_to_dict
 from mhttc.apps.users.decorators import user_agree_terms
 
 from mhttc.apps.main.models import Project, Training
@@ -96,7 +97,21 @@ def edit_form_template(request, uuid, stage=1):
         raise Http404
 
     if request.method == "POST":
+
+        # Get standard form fields
         form = FormTemplateForm(request.POST)
+        form.stage = project.stage
+
+        # Also get strategy_ fields
+        strategy = {}
+        for key in request.POST:
+            if key.startswith("strategy_"):
+                strategy[key] = request.POST[key]
+
+        # TODO stopped here, need to parse these custom for validation based on stage
+        import pickle
+
+        pickle.dump({"form": form, "strategy": strategy}, open("form.pkl", "wb"))
         if form.is_valid():
             template = form.save(commit=False)
 
@@ -111,8 +126,19 @@ def edit_form_template(request, uuid, stage=1):
             template.center = request.user.center
             template.save()
             return redirect("center_details", uuid=template.center.uuid)
+
+        # Not valid - return to page to populate
+        else:
+            return render(
+                request,
+                "projects/edit_form_template.html",
+                {"form": form, "project": project},
+            )
     else:
         form = FormTemplateForm()
+        if project.form is not None:
+            form = FormTemplateForm(initial=model_to_dict(project.form))
+        form.stage = project.stage
     return render(
         request, "projects/edit_form_template.html", {"form": form, "project": project}
     )

@@ -14,18 +14,23 @@ login form.
 ![interface-index.png]({{ site.baseurl }}/docs/usage/img/interface-index.png)
 
 
-## Users
+## Accounts
 
 By default, a user cannot make their own account. An administrative user
 should go to their Profile and under Admin settings, enter a list of emails
 to send invitations to:
 
-TODO MAKE THIS VIEW CREATE IMAGE
+![interface-invite.png]({{ site.baseurl }}/docs/usage/img/interface-invite.png)
 
 The users are then notified via email with an email login and temporary password.
 By way of doing this via email we also verify the email address.
 
-TODO TAKE PICTURE OF EMAIL
+![interface-invite-email.png]({{ site.baseurl }}/docs/usage/img/interface-invite-email.png)
+
+And then the users are required to login at the custom link for them, and also provide
+a new password. 
+
+![interface-invite-login.png]({{ site.baseurl }}/docs/usage/img/interface-invite-login.png)
 
 At the onset of logging in, the user is first asked to agree to the privacy policy
 and terms of service. 
@@ -61,6 +66,16 @@ The user profile looks like this:
 
 <br>
 
+
+From the profile the user can change their password, or delete their account.
+This action cannot be undone.
+
+## Search
+
+For an unathenticated user, the search goes to the public search on [https://mhttcnetwork.org/](https://mhttcnetwork.org/).
+When logged in, it searches across projects.
+
+![interface-search.png]({{ site.baseurl }}/docs/usage/img/interface-search.png)
 
 ## Centers
 
