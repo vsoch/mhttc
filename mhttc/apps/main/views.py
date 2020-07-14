@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.forms.models import model_to_dict
 from mhttc.apps.users.decorators import user_agree_terms
 
-from mhttc.apps.main.models import Project, Training, Strategy
+from mhttc.apps.main.models import Project, Training, TrainingParticipant, Strategy
 from mhttc.apps.users.models import get_center
 from mhttc.settings import VIEW_RATE_LIMIT as rl_rate, VIEW_RATE_LIMIT_BLOCK as rl_block
 from mhttc.apps.main.forms import ProjectForm, TrainingForm, FormTemplateForm
@@ -109,7 +109,6 @@ def edit_form_template(request, uuid, stage=1):
         form = FormTemplateForm(request.POST)
         form.stage = project.stage
 
-        print(strategy)
         if form.is_valid():
             template = form.save(commit=False)
             template.save()
@@ -187,11 +186,20 @@ def edit_form_template(request, uuid, stage=1):
 def view_project_form(request, uuid):
     try:
         project = Project.objects.get(uuid=uuid)
+        form = FormTemplateForm(initial=model_to_dict(project.form))
+
         if project.form == None:
             messages.info(request, "This project does not have a form started yet.")
             return redirect("project_details", project.uuid)
         return render(
-            request, "projects/view_project_form.html", context={"project": project}
+            request,
+            "projects/view_project_form.html",
+            context={
+                "project": project,
+                "form": form,
+                "disabled": True,
+                "strategies": project.form.implement_strategy.all(),
+            },
         )
     except Project.DoesNotExist:
         raise Http404
@@ -239,8 +247,43 @@ def center_training(request):
 def training_details(request, uuid):
     try:
         training = Training.objects.get(uuid=uuid)
+        edit_permission = training.center == request.user.center
+
+        if request.method == "POST":
+            emails = request.POST.get("emails", "")
+            for email in emails.split('\n'):
+
+                email = email.strip()
+                if not email:
+                    continue
+                participant, created = TrainingParticipant.objects.get_or_create(training=training, email=email)
+                participant.save()
+
         return render(
-            request, "training/training_details.html", context={"training": training}
+            request, "training/training_details.html", context={"training": training, "edit_permission": edit_permission}
         )
     except Training.DoesNotExist:
         raise Http404
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def edit_training(request, uuid):
+    """edit training details
+    """
+    try:
+        training = Training.objects.get(uuid=uuid)
+    except Training.DoesNotExist:
+        raise Http404
+
+    if request.method == "POST":
+        form = TrainingForm(request.POST)
+        if form.is_valid():
+            training = form.save(commit=False)
+            training.center = request.user.center
+            training.save()
+            return redirect("traiing_details", uuid=training.uuid)
+    else:
+        form = TrainingForm(initial=model_to_dict(training))
+    return render(request, "training/new_training.html", {"form": form})

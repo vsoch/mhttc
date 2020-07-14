@@ -28,6 +28,7 @@ urlpatterns = [
     ),
     # Training
     path("training/new/", views.new_training, name="new_training"),
+    path("training/<uuid:uuid>/edit", views.edit_training, name="edit_training"),
     path("training/<uuid:uuid>/", views.training_details, name="training_details"),
     path("center/training/", views.center_training, name="center_training"),
 ]

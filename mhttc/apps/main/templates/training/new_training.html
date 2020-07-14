@@ -1,8 +1,9 @@
 {% extends "base/page.html" %}
 {% load static %}
 {% block content %}
-    <h2>New Training</h2>
-    <small>This training will be associated with your center, {{ request.user.center.name }}</small>
+    <h2>{% if form.name.value %}Edit{% else %}New{% endif %} Training</h2>
+    <small>This training {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}</small>
+    <br><a href="{% url 'center_training' %}"><<</a>
     <hr>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}

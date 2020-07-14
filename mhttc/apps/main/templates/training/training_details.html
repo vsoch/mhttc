@@ -1,0 +1,88 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  {% include "messages/message.html" %}
+  <div class="row">
+    <div class="col-md-12" style="padding-bottom:20px">
+      <h1>{{ training.name }}</h1>
+      <h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-participants-tab" data-toggle="tab" href="#nav-participants" role="tab" aria-controls="nav-participants" aria-selected="true">Participants</a>
+                <a class="nav-item nav-link" id="nav-details-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-details" aria-selected="false">Details</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane show active" id="nav-participants" role="tabpanel" aria-labelledby="nav-projects-tab" style="padding-top:20px">
+
+                {% if edit_permission %}
+                <h2>Add Participants</h2>
+		<form method="POST" class="post-form">
+		 {% csrf_token %}
+		  <label for="emails">Add participants to the training by email:</label>
+		  <textarea name="emails" cols="40" rows="10" class="form-control" required id="emails"></textarea> 
+		  <span class="helptext">Please copy paste emalis (one per line) for participants to add.</span></p>
+		  <button style="margin-top:30px" type="submit" class="save btn btn-default">Add Participants</button>
+		</form>{% endif %}
+
+            {% if training.trainingparticipant_set.count > 0 %}
+            <h2 style="padding-top:40px">Current Participants</h2>
+	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
+	      <tr>
+	       <th>Email</th>
+	       <th>Completed</th>
+	      </tr>
+	    </thead>
+	      <tbody>{% for person in training.trainingparticipant_set.all %}
+              <tr>
+                 <td>{{ person.email }}</td>
+                 <td><span class="badge badge-{% if person.competed %}success{% else %}primary{% endif %}">{{ person.completed }}</span></td>
+              </tr>{% endfor %}
+	    </tbody>
+            </table>{% endif %}
+            </div>
+            <div class="tab-pane fade " id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">
+	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
+	      <tr>
+	       <th>Key</th>
+	       <th>Value</th>
+	      </tr>
+	    </thead>
+	      <tbody>
+              <tr>
+                 <td>Name</td>
+                 <td>{{ training.name }}</td>
+              </tr>
+              <tr>
+                 <td>Center</td>
+                 <td>{{ training.center.name }}</td>
+              </tr>
+              <tr>
+                 <td>Participants</td>
+                 <td>{{ training.trainingparticipant_set.count }}</td>
+              </tr>
+	    </tbody>
+	   </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block pagescripts %}
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#center-table').DataTable();
+  {% if center.projects.count > 0 %}$('#projects-table').DataTable();{% endif %}
+  {% if center.trainings.count > 0 %}$('#trainings-table').DataTable();{% endif %}
+});
+</script>
+{% endblock %}

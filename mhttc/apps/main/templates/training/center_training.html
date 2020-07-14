@@ -10,12 +10,15 @@
             <th>Name</th>
             <th>Description</th>
             <th>Contact</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>{% for training in events %}<tr>
             <td>{{ training.name }}</td>
             <td>{{ training.description | truncatechars:100 }}</td>
             <td><a href="mailto:{{ training.contact.email }}">{{ training.contact.email }}</a></td>
+            <td><a href="{% url 'edit_training' training.uuid %}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
+                <a target="_blank" href="{{ training.get_absolute_url }}"><button type="button" class="btn btn-primary btn-sm">View</button></a></td>
         </tr>{% endfor %}
     </tbody>
 </table>
