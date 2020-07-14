@@ -40,6 +40,10 @@ class TrainingForm(forms.ModelForm):
 
 
 class FormTemplateForm(forms.ModelForm):
+    """A form to populate a project template. Commented out fields are
+       not required for stage 1
+    """
+
     stage = 1
 
     class Meta:
@@ -61,40 +65,61 @@ class FormTemplateForm(forms.ModelForm):
             "consider_system_factors",
             "consider_org_factors",
             "consider_clinical_factors",
-            "consider_sustainment_strategy",
+            #            "consider_sustainment_strategy",       # Only required for stage3
             "outcome_reach",
             "outcome_effectiveness",
             "outcome_adoption",
             "outcome_quality",
             "outcome_cost",
+            #            "outcome_maintenance",                 # Only required for stage3
             "outcome_other",
             "implementation_recruited",
-            "implementation_participants",
-            "implementation_enrolled",
-            "implementation_completing_half",
-            "implementation_completing_majority",
-            "results_reach",
-            "results_effectiveness",
-            "results_adoption",
-            "results_quality",
-            "results_cost",
+            #            "implementation_participants",         # # enrolled, only after stage 1
+            #            "implementation_enrolled",             # Only required after stage 1
+            #            "implementation_completing_half",      # Only required for stage 3
+            #            "implementation_completing_majority",  # Only required for stage 3
+            #            "results_reach",                       # Only required after stage 1
+            #            "results_effectiveness",               # Only required after stage 1
+            #            "results_adoption",                    # Only required after stage 1
+            #            "results_quality",                     # Only required after stage 1
+            #            "results_cost",                        # Only required after stage 1
+            #            "result_maintenance",                  # Only required for stage 3
             "results_other",
         )
 
     def clean(self):
         cleaned_data = super().clean()
-        print(cleaned_data)
-        print(self.stage)
 
-        # cc_myself = cleaned_data.get("cc_myself")
-        # subject = cleaned_data.get("subject")
+        # Required attributes for stage 2 and 3
+        if self.stage > 1:
+            for field in [
+                "results_reach",
+                "results_effectiveness",
+                "results_adoption",
+                "results_quality",
+                "results_cost",
+                "implementation_enrolled",
+                "implementation_participants",
+            ]:
+                if not cleaned_data.get(field):
+                    raise forms.ValidationError(
+                        f"{field} is required for this stage of the template."
+                    )
 
-        # if cc_myself and subject:
+        # Required attributes for just stage 3
+        if self.stage > 2:
+            for field in [
+                "outcome_maintenance",
+                "consider_sustainment_strategy",
+                "result_maintenance",
+                "implementation_completing_half",
+                "implementation_completing_majority",
+            ]:
+                if not cleaned_data.get(field):
+                    raise forms.ValidationError(
+                        f"{field} is required for this stage of the template."
+                    )
 
-    #                raise ValidationError(
-    #                   "Did not send for 'help' in the subject despite "
-    #                  "CC'ing yourself."
-    #             )
     def __init__(self, *args, **kwargs):
         super(FormTemplateForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():

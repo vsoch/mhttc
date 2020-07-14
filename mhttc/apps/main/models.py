@@ -100,21 +100,11 @@ class Strategy(models.Model):
     """An implementation strategy to add to a FormTemplate
     """
 
-    FREQUENCY_CHOICES = [
-        ("daily", "daily",),
-        ("monthly", "monthly",),
-        ("weeky", "weekly",),
-        ("yearly", "yearly",),
-        ("bi-weeky", "bi-weekly",),
-        ("bi-monthly", "bi-monthly",),
-    ]
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     time_created = models.DateTimeField("date created", auto_now_add=True)
     time_updated = models.DateTimeField("date modified", auto_now=True)
 
-    frequency = models.CharField(
-        max_length=250, blank=False, choices=FREQUENCY_CHOICES, help_text="Frequency"
-    )
+    frequency = models.CharField(max_length=250, blank=False, help_text="Frequency")
     strategy_format = models.CharField(
         max_length=500, blank=True, null=True, help_text="Format"
     )
@@ -198,10 +188,21 @@ class FormTemplate(models.Model):
         help_text="Individual clinician factors (e.g., alignment with existing practice; complexity)"
     )
     consider_sustainment_strategy = models.TextField(
-        help_text="Sustainment strategies applied"
+        help_text="Sustainment strategies applied", blank=True, null=True
     )  # only form stage 3
 
-    # TODO possibly add checkboxes here in some respect
+    # 5. Implementation process
+    implementation_recruited = models.TextField(
+        help_text="How will participants be recruited?"
+    )
+    implementation_participants = models.PositiveIntegerField(
+        help_text="How many participants are enrolled?", blank=True, null=True
+    )
+    implementation_enrolled = models.PositiveIntegerField(
+        help_text="# (%) initiating implementation strategy (individuals, teams or organizations)",
+        blank=True,
+        null=True,
+    )
 
     # 5. Measures being planned (stage 1)
     outcome_reach = models.TextField(
@@ -217,42 +218,49 @@ class FormTemplate(models.Model):
         help_text="Implementation Fidelity/Adherence/Quality. How will you be measuring it?"
     )
     outcome_cost = models.TextField(help_text="Cost. How will you keep track of it?")
+    outcome_maintenance = models.TextField(help_text="Maintenance/Sustainment.")
     outcome_other = models.TextField(help_text="Any other measures being planned?")
-
-    # 5. Implementation process (stage 2)
-    implementation_recruited = models.PositiveIntegerField(
-        help_text="How many participants will be recruited?"
-    )
-    implementation_participants = models.PositiveIntegerField(
-        help_text="How many participants are enrolled?"
-    )
-    implementation_enrolled = models.PositiveIntegerField(
-        help_text="# (%) initiating implementation strategy (individuals, teams or organizations"
-    )
 
     # the following are only for (stage 3)
     implementation_completing_half = models.PositiveIntegerField(
-        help_text="# (%) completing 50% of implementation strategy activities"
+        help_text="# (%) completing 50% of implementation strategy activities",
+        blank=True,
+        null=True,
     )
     implementation_completing_majority = models.PositiveIntegerField(
-        help_text="# (%) completing 80% or more of implementation strategy activities"
+        help_text="# (%) completing 80% or more of implementation strategy activities",
+        blank=True,
+        null=True,
     )
 
     # 6. Results Available (stage 2)
     results_reach = models.TextField(
-        help_text="Reach (# or percentage of population, what is the population, and how will you be measuring the outcome?"
+        help_text="Reach (# or percentage of population, what is the population, and how will you be measuring the outcome?",
+        blank=True,
+        null=True,
     )
     results_effectiveness = models.TextField(
-        help_text="Effectiveness of Intervention/Program/Services (w/consumers), how will you measure it?"
+        help_text="Effectiveness of Intervention/Program/Services (w/consumers), how will you measure it?",
+        blank=True,
+        null=True,
     )
     results_adoption = models.TextField(
-        help_text="Results available for number of providers?"
+        help_text="Results available for number of providers?", blank=True, null=True
     )
     results_quality = models.TextField(
-        help_text="Results available for implementation Fidelity/Adherence/Quality?"
+        help_text="Results available for implementation Fidelity/Adherence/Quality?",
+        blank=True,
+        null=True,
     )
-    results_cost = models.TextField(help_text="Results available for cost?")
-    results_other = models.TextField(help_text="Results available for other?")
+    results_cost = models.TextField(
+        help_text="Results available for cost?", blank=True, null=True
+    )
+    results_maintenance = models.TextField(
+        help_text="Results for Maintenance/Sustainment.", blank=True, null=True
+    )
+    results_other = models.TextField(
+        help_text="Results available for other?", blank=True, null=True
+    )
 
     def get_absolute_url(self):
         return reverse("formtemplate_details", args=[self.uuid])

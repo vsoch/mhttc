@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.forms.models import model_to_dict
 from mhttc.apps.users.decorators import user_agree_terms
 
-from mhttc.apps.main.models import Project, Training
+from mhttc.apps.main.models import Project, Training, Strategy
 from mhttc.apps.users.models import get_center
 from mhttc.settings import VIEW_RATE_LIMIT as rl_rate, VIEW_RATE_LIMIT_BLOCK as rl_block
 from mhttc.apps.main.forms import ProjectForm, TrainingForm, FormTemplateForm
@@ -98,34 +98,65 @@ def edit_form_template(request, uuid, stage=1):
 
     if request.method == "POST":
 
+        # If the form already belongs to another center
+        if project.center != None and project.center != request.user.center:
+            messages.warning(
+                request, "You are not allowed to edit a form not owned by your center.",
+            )
+            return redirect("index")
+
         # Get standard form fields
         form = FormTemplateForm(request.POST)
         form.stage = project.stage
 
-        # Also get strategy_ fields
-        strategy = {}
-        for key in request.POST:
-            if key.startswith("strategy_"):
-                strategy[key] = request.POST[key]
-
-        # TODO stopped here, need to parse these custom for validation based on stage
-        import pickle
-
-        pickle.dump({"form": form, "strategy": strategy}, open("form.pkl", "wb"))
+        print(strategy)
         if form.is_valid():
             template = form.save(commit=False)
-
-            # If the form already belongs to another center
-            if template.center != None and template.center != request.user.center:
-                messages.warning(
-                    request,
-                    "You are not allowed to edit a form not owned by your center.",
-                )
-                return redirect("index")
-
-            template.center = request.user.center
             template.save()
-            return redirect("center_details", uuid=template.center.uuid)
+
+            # Also get strategy_ fields
+            strategy = {}
+            indices = set()
+            for key in request.POST:
+                if key.startswith("strategy_"):
+                    strategy[key] = request.POST[key]
+                    indices.add(key.split("_")[-1])
+
+            # For each index, only add if all fields are defined
+            new_strategies = []
+            for index in indices:
+                for field in ["type", "format", "units", "frequency"]:
+                    if "strategy_%s_%s" % (field, index) not in strategy:
+                        continue
+
+                # Clean all units
+                strategy_type = strategy["strategy_type_%s" % index].strip()
+                strategy_format = strategy["strategy_format_%s" % index].strip()
+                strategy_units = strategy["strategy_units_%s" % index].strip()
+                strategy_frequency = strategy["strategy_frequency_%s" % index].strip()
+
+                new_strategy = Strategy.objects.create(
+                    strategy_type=strategy_type,
+                    strategy_format=strategy_format,
+                    planned_number_units=int(strategy_units),
+                    frequency=strategy_frequency,
+                )
+                new_strategies.append(new_strategy)
+
+            # If we have new strategies, remove all
+            if new_strategies:
+                [x.delete() for x in template.implement_strategy.all()]
+                [template.implement_strategy.add(x) for x in new_strategies]
+                template.save()
+
+            # Unless we are at stage 3, add 1 to stage
+            if project.stage != 3:
+                project.stage += 1
+                form.stage = project.stage
+            project.form = form
+            project.save()
+
+            return redirect("center_details", uuid=project.center.id)
 
         # Not valid - return to page to populate
         else:
@@ -140,7 +171,13 @@ def edit_form_template(request, uuid, stage=1):
             form = FormTemplateForm(initial=model_to_dict(project.form))
         form.stage = project.stage
     return render(
-        request, "projects/edit_form_template.html", {"form": form, "project": project}
+        request,
+        "projects/edit_form_template.html",
+        {
+            "form": form,
+            "project": project,
+            "strategies": project.form.implement_strategy.all(),
+        },
     )
 
 
