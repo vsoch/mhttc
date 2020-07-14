@@ -250,17 +250,35 @@ def training_details(request, uuid):
         edit_permission = training.center == request.user.center
 
         if request.method == "POST":
+
+            # Add new participant emails
             emails = request.POST.get("emails", "")
-            for email in emails.split('\n'):
+            for email in emails.split("\n"):
 
                 email = email.strip()
                 if not email:
                     continue
-                participant, created = TrainingParticipant.objects.get_or_create(training=training, email=email)
+                participant, created = TrainingParticipant.objects.get_or_create(
+                    training=training, email=email
+                )
                 participant.save()
 
+            # Mark as complteed
+            for key in request.POST:
+                if key.startswith("completed_"):
+                    uuid = key.replace("completed_", "", 1)
+                    participant = TrainingParticipant.objects.get(id=uuid)
+                    print(request.POST[key])
+                    if request.POST[key] == "on":
+                        participant.completed = False
+                    else:
+                        participant.completed = True
+                    participant.save()
+
         return render(
-            request, "training/training_details.html", context={"training": training, "edit_permission": edit_permission}
+            request,
+            "training/training_details.html",
+            context={"training": training, "edit_permission": edit_permission},
         )
     except Training.DoesNotExist:
         raise Http404

@@ -45,6 +45,7 @@ class TrainingParticipant(models.Model):
     """A training participant is an email address (and status?) to indicate
        the status for a participant.
     """
+
     name = models.CharField(max_length=250, blank=False)
     email = models.CharField(max_length=100, blank=True, null=True)
     training = models.ForeignKey("main.Training", on_delete=models.PROTECT, blank=False)

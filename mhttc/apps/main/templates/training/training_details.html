@@ -33,6 +33,10 @@
 
             {% if training.trainingparticipant_set.count > 0 %}
             <h2 style="padding-top:40px">Current Participants</h2>
+            <button id="checkAll" style="float:right; margin-bottom:10px" type="button" class="save btn btn-default btn-sm">Check All</button>
+            <button id="uncheckAll" style="float:right; margin-bottom:10px" type="button" class="save btn btn-default btn-sm">Uncheck All</button>
+            <form method="POST" class="post-form">
+            {% csrf_token %}
 	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
 	      <tr>
 	       <th>Email</th>
@@ -42,10 +46,18 @@
 	      <tbody>{% for person in training.trainingparticipant_set.all %}
               <tr>
                  <td>{{ person.email }}</td>
-                 <td><span class="badge badge-{% if person.competed %}success{% else %}primary{% endif %}">{{ person.completed }}</span></td>
+                 <td><span class="badge badge-{% if person.completed %}success{% else %}primary{% endif %}">{{ person.completed }}</span>
+			  <span style="padding-left:50px"><input class="form-check-input" name="completed_{{ person.id }}" type="checkbox" value="" id="defaultCheck1" {% if person.completed %}checked{% endif %}>
+			  <label class="form-check-label" for="defaultCheck1">
+			    Mark as completed
+			  </label></span>
+                 </td>
               </tr>{% endfor %}
 	    </tbody>
-            </table>{% endif %}
+            </table>
+            <button style="margin-top:30px" type="submit" class="save btn btn-default">Save</button>
+            </form>
+            {% endif %}
             </div>
             <div class="tab-pane fade " id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">
 	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
@@ -74,15 +86,18 @@
     </div>
 </div>
 {% endblock %}
-{% block pagescripts %}
+{% block scripts %}
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(document).ready(function() {
-  $('#center-table').DataTable();
-  {% if center.projects.count > 0 %}$('#projects-table').DataTable();{% endif %}
-  {% if center.trainings.count > 0 %}$('#trainings-table').DataTable();{% endif %}
+  $("#checkAll").click(function(){
+    $('input:checkbox').not(this).prop('checked', true);
+  });
+  $("#uncheckAll").click(function(){
+    $('input:checkbox').not(this).prop('checked', false);
+  });
 });
 </script>
 {% endblock %}
