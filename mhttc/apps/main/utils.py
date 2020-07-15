@@ -35,7 +35,7 @@ def make_certificate_response(name, center, training_title, image_path=None):
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = (
-        'attachment; filename="MHTTC-training-%s-certificate.png"'
+        'attachment; filename="MHTTC-training-%s-certificate.pdf"'
         % center.replace(" ", "-").lower()
     )
 

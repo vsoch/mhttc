@@ -127,6 +127,7 @@ to generate a certificate:
 
 ![interface-download-certificate.png]({{ site.baseurl }}/docs/usage/img/interface-download-certificate.png)
 
+An example pdf is [available here]({{ site.baseurl }}/docs/usage/img/MHTTC-training-dinosaur-center-certificate.pdf) (probably needs some work!)
 
 ## Information
 
