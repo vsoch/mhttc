@@ -127,10 +127,6 @@ to generate a certificate:
 
 ![interface-download-certificate.png]({{ site.baseurl }}/docs/usage/img/interface-download-certificate.png)
 
-An example is shown below. This is the default, in the case that no custom png URL is provided.
-
-![certificate-example.png]({{ site.baseurl }}/docs/usage/img/certificate-example.png)
-
 
 ## Information
 
