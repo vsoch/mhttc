@@ -2,8 +2,10 @@
 {% load static %}
 {% block content %}
     <h2>{% if form.name.value %}Edit{% else %}New{% endif %} Training</h2>
-    <small>This training {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}</small>
-    <br><a href="{% url 'center_training' %}"><<</a>
+    <hr>
+    <p class="alert alert-info" style="max-width:100%">This training {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}. By default, the certificate will use <a target="_blank" href="https://docs.google.com/presentation/d/1V7YYtwcwfhSd1WJ9C0XGWOLwXjPU6zcdFxjeGYeXJJE/edit?usp=sharing">this template</a>. To customize this template for your center, you should
+update the slide, including graphics, text and the signature(s). Then File -> Download -> PNG Image (current slide). You should then put the image in a web accessible location (e.g., a raw GitHub address) and then post it in the "image url" box below.</p>
+    <br><a href="{% url 'center_training' %}"><< back</a>
     <hr>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}

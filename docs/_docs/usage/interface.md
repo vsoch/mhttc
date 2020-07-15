@@ -105,11 +105,31 @@ and easy access to projects and trainings
 
 <br>
 
+## Training
+
 Each center can have one or more training events (these events are the ones
-that will have associated certificates for participants to download).
+that have associated certificates for participants to download). In fact, when creating
+a new training, the creator can provide an image URL to generate from:
 
 <br>
 
+![interface-new-training.png]({{ site.baseurl }}/docs/usage/img/interface-new-training.png)
+
+<br>
+
+A center member can then add people to the training (based on email address) and mark
+them as complete when it's completed.
+
+![interface-training-details.png]({{ site.baseurl }}/docs/usage/img/interface-training-details.png)
+
+Upon being marked as completed, the participant then receives an email, and can enter his or her email address and name
+to generate a certificate:
+
+![interface-download-certificate.png]({{ site.baseurl }}/docs/usage/img/interface-download-certificate.png)
+
+An example is shown below. This is the default, in the case that no custom png URL is provided.
+
+![certificate-example.png]({{ site.baseurl }}/docs/usage/img/certificate-example.png)
 
 
 ## Information
@@ -147,11 +167,15 @@ So far, we have a basic page to create a new project.
 <br>
 
 and then view the project details. Note that each project has an associated form
-template, which the user should move through in stages.
+template:
 
 ![interface-project.png]({{ site.baseurl }}/docs/usage/img/interface-project.png)
 
-
-The view for the form is still under development.
+Which the user should move through in stages:
 
 ![interface-form-template.png]({{ site.baseurl }}/docs/usage/img/interface-form-template.png)
+
+## Training
+
+Trainings are associated with centers. Any center member can create a training on behalf
+of their center.

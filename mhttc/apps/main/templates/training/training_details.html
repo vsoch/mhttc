@@ -33,30 +33,33 @@
 
             {% if training.trainingparticipant_set.count > 0 %}
             <h2 style="padding-top:40px">Current Participants</h2>
+            <p>Once you mark someone as completed training, you cannot unmark them</p>
             <button id="checkAll" style="float:right; margin-bottom:10px" type="button" class="save btn btn-default btn-sm">Check All</button>
             <button id="uncheckAll" style="float:right; margin-bottom:10px" type="button" class="save btn btn-default btn-sm">Uncheck All</button>
-            <form method="POST" class="post-form">
-            {% csrf_token %}
 	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
 	      <tr>
 	       <th>Email</th>
 	       <th>Completed</th>
 	      </tr>
 	    </thead>
-	      <tbody>{% for person in training.trainingparticipant_set.all %}
+	      <tbody>
+              <form method="POST" class="post-form">
+              {% csrf_token %}
+              {% for person in training.trainingparticipant_set.all %}
               <tr>
                  <td>{{ person.email }}</td>
                  <td><span class="badge badge-{% if person.completed %}success{% else %}primary{% endif %}">{{ person.completed }}</span>
-			  <span style="padding-left:50px"><input class="form-check-input" name="completed_{{ person.id }}" type="checkbox" value="" id="defaultCheck1" {% if person.completed %}checked{% endif %}>
-			  <label class="form-check-label" for="defaultCheck1">
+			  <span style="padding-left:50px">
+                          <input class="form-check-input form-control" name="completed_{{ person.id }}" type="checkbox" id="completed_{{ person.id }}" {% if person.completed %}checked{% endif %}>
+			  <label class="form-check-label" for="completed_{{ person.id }}">
 			    Mark as completed
 			  </label></span>
                  </td>
               </tr>{% endfor %}
+              <tr><td><button style="margin-top:30px" type="submit" class="save btn btn-default">Save</button></td></tr>
+              </form>
 	    </tbody>
             </table>
-            <button style="margin-top:30px" type="submit" class="save btn btn-default">Save</button>
-            </form>
             {% endif %}
             </div>
             <div class="tab-pane fade " id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">

@@ -8,7 +8,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-from mhttc.apps.main.models import Project, FormTemplate, Training
+from mhttc.apps.main.models import Project, FormTemplate, Training, TrainingParticipant
 from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
 from django import forms
 
@@ -31,10 +31,21 @@ class TrainingForm(forms.ModelForm):
         model = Training
 
         # Center is associated to the user creating the training
-        fields = ("name", "description", "contact")
+        fields = ("name", "description", "contact", "image_url")
 
     def __init__(self, *args, **kwargs):
         super(TrainingForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+
+
+class CertificateForm(forms.ModelForm):
+    class Meta:
+        model = TrainingParticipant
+        fields = ("name", "email")
+
+    def __init__(self, *args, **kwargs):
+        super(CertificateForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control"
 

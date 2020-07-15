@@ -12,16 +12,6 @@ See the [documentation](https://vsoch.github.io/mhttc) to get started.
 
  - what information should go on the front page?
  - does other centers (with only access to projects) mean no access to training resources?
- - is the project template consistent across centers?
-
-## TODO
-
-Next:
-
- - add checkboxes to mark participants as completed training and submit
- - create view to download training certificate
- - send email to notify about view
-
 
 ## Thanks
 

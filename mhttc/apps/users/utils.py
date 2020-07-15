@@ -35,12 +35,12 @@ import urllib.request as urllib
 
 
 def send_email(
-    request,
     email_to,
     message,
     subject,
     attachment=None,
     filetype="application/pdf",
+    request=None,
     filename=None,
 ):
     """given an email, a message, and an attachment, and a SendGrid API key is defined in
@@ -54,12 +54,12 @@ def send_email(
        subject: the email subject
        attachment: the attachment file on the server
     """
-    print(SENDGRID_SENDER_EMAIL)
     if not SENDGRID_API_KEY or not SENDGRID_SENDER_EMAIL:
-        messages.warning(
-            request,
-            "SendGrid secrets were not found in the environment. Please see https://vsoch.github.io/mhttc/docs/getting-started/#sendgrid-secrets",
-        )
+        if request is not None:
+            messages.warning(
+                request,
+                "SendGrid secrets were not found in the environment. Please see https://vsoch.github.io/mhttc/docs/getting-started/#sendgrid-secrets",
+            )
         return False
 
     mail = Mail(
