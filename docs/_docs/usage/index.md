@@ -1,6 +1,6 @@
 ---
 title: Usage
-description: Basic usage of the FreeGenes Interface
+description: Basic usage of the MHTTC Interface
 ---
 
 # Usage

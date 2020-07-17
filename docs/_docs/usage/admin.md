@@ -1,6 +1,6 @@
 ---
 title: Admin Pages
-description: FreeGenes administrative views
+description: MHTTC administrative views
 ---
 
 # Admin Pages
