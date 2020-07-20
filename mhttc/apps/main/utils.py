@@ -13,12 +13,11 @@ from django.http import HttpResponse
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Image
 import os
 
 import PIL
 import requests
-from io import BytesIO, StringIO
+from io import BytesIO
 
 
 def make_certificate_response(name, center, training_title, image_path=None):

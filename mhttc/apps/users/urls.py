@@ -10,7 +10,6 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from django.urls import path
 from django.conf.urls import url, include
-from django.contrib.auth import views as auth_views
 import mhttc.apps.users.views as views
 from social_django import urls as social_urls
 

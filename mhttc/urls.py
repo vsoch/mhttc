@@ -9,7 +9,6 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from django.contrib import admin
-from django.contrib.sitemaps.views import sitemap, index
 from django.urls import include, path
 from mhttc.apps.main import urls as main_urls
 from mhttc.apps.base import urls as base_urls

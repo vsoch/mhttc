@@ -9,7 +9,6 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from mhttc.settings import DOMAIN_NAME
-from mhttc.apps.users.models import Center
 from django.db import models
 from django.urls import reverse
 import uuid

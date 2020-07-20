@@ -1,28 +1,41 @@
       <div class="col-12 col-md-3 col-xl-2 ct-sidebar">
         <nav class="collapse ct-links" id="ct-docs-nav">
+          <!--Center-->
+          {% if request.user.is_authenticated and request.user.center %}
+          <div class="ct-toc-item active">
+            <a class="ct-toc-link" href="{% url 'all_centers' %}">Centers</a>
+            <ul class="nav ct-sidenav">
+              <li class="{% if request.path == '/u/center/'%}active{% endif %}">
+                <a href="{% url 'user_center' %}">My Center</a></li>
+            </ul>
+          </div>{% endif %}
+          <!--Projects-->
           {% if request.user.is_authenticated %}<div class="ct-toc-item active">
-            <a class="ct-toc-link" href="{% url 'all_projects' %}">Projects</a>
+            <a class="ct-toc-link" href="{% url 'all_projects' %}">Implementation Projects</a>
             <ul class="nav ct-sidenav">
               <li class="{% if request.path == '/u/projects/'%}active{% endif %}">
                 <a href="{% url 'user_projects' %}">My Projects</a></li>
               <li class="{% if request.path == '/projects/new/'%}active{% endif %}">
                 <a href="{% url 'new_project' %}">New Project</a></li>
             </ul>
-          </div>
-          <!--Center-->
-          <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="{% url 'all_centers' %}">Centers</a>
+          </div>{% endif %}
+          <!--Training-->
+          {% if request.user.has_full_access %}<div class="ct-toc-item active">
+            <a class="ct-toc-link" href="">Training Certificates</a>
             <ul class="nav ct-sidenav">
-              {% if request.user.center %}<li class="{% if request.path == '/u/center/'%}active{% endif %}">
-                <a href="{% url 'user_center' %}">My Center</a></li>
-              <li class="{% if request.path == '/training/'%}active{% endif %}">
+              <li class="{% if request.path == '/u/center/'%}active{% endif %}">
                 <a href="{% url 'center_training' %}">Training</a></li>
               <li class="{% if request.path == '/training/'%}active{% endif %}">
-                <a href="{% url 'new_training' %}">New Training</a></li>{% endif %}
+                <a href="{% url 'new_training' %}">New Training</a></li>
             </ul>
           </div>{% endif %}
           <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="">Information</a>
+            <a class="ct-toc-link" href="">MHTTC Info</a>
+            <ul class="nav ct-sidenav">
+            </ul>
+          </div>
+          <div class="ct-toc-item active">
+            <a class="ct-toc-link" href="">Support</a>
             <ul class="nav ct-sidenav">
               <li class="{% if request.path == '/about/'%}active{% endif %}">
                 <a href="{% url 'about' %}">About</a></li>

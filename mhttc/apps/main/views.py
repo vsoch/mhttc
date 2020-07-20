@@ -18,7 +18,6 @@ from django.forms.models import model_to_dict
 from mhttc.apps.users.decorators import user_agree_terms
 
 from mhttc.apps.main.models import Project, Training, TrainingParticipant, Strategy
-from mhttc.apps.users.models import get_center
 from mhttc.settings import VIEW_RATE_LIMIT as rl_rate, VIEW_RATE_LIMIT_BLOCK as rl_block
 from mhttc.apps.main.forms import (
     ProjectForm,
@@ -27,8 +26,6 @@ from mhttc.apps.main.forms import (
     CertificateForm,
 )
 from mhttc.apps.main.utils import make_certificate_response
-
-import os
 
 
 ## Projects
@@ -225,6 +222,13 @@ def view_project_form(request, uuid):
 @login_required
 @user_agree_terms
 def new_training(request):
+    """Create a new training. A user that does not have full access to the site
+       cannot see this view
+    """
+    if not request.user.has_full_access:
+        messages.warning(request, "You are not allowed to perform this action.")
+        return redirect("index")
+
     if request.method == "POST":
         form = TrainingForm(request.POST)
         if form.is_valid():
@@ -241,8 +245,13 @@ def new_training(request):
 @login_required
 @user_agree_terms
 def center_training(request):
-    """Return a listing of training events being held by the center
+    """Return a listing of training events being held by the center. A user
+       that does not have full access to the site cannot see this view.
     """
+    if not request.user.has_full_access:
+        messages.warning(request, "You are not allowed to perform this action.")
+        return redirect("index")
+
     if not request.user.center:
         messages.info(request, "You are not part of a center.")
         redirect("index")
@@ -258,6 +267,13 @@ def center_training(request):
 @login_required
 @user_agree_terms
 def training_details(request, uuid):
+    """Return the details of a training. A user that does not have full access
+       to the site cannot see this view.
+    """
+    if not request.user.has_full_access:
+        messages.warning(request, "You are not allowed to perform this action.")
+        return redirect("index")
+
     try:
         training = Training.objects.get(uuid=uuid)
         edit_permission = training.center == request.user.center
@@ -265,7 +281,10 @@ def training_details(request, uuid):
         if request.method == "POST":
 
             # Only allowed to edit for their center
-            if request.user.center != training.center:
+            if (
+                request.user.center != training.center
+                or not request.user.has_full_access
+            ):
                 messages.warning(request, "You are not allowed to perform this action.")
                 return redirect("center_training")
 
@@ -287,7 +306,7 @@ def training_details(request, uuid):
                     uuid = key.replace("completed_", "", 1)
                     participant = TrainingParticipant.objects.get(id=uuid)
                     participant.completed = True
-                    participate.send_certificate(training=training)
+                    participant.send_certificate(training=training)
                     participant.save()
 
         return render(

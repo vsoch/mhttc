@@ -7,7 +7,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from mhttc.apps.users.models import Center
 
 
@@ -33,7 +33,11 @@ class Command(BaseCommand):
             "Pacific Southwest MHTTC",
             "Northwest MHTTC",
         ]
+
+        # The listing above is the 13 that should have full access
         for center in centers:
             print("Creating center %s" % center)
-            Center.objects.get_or_create(name=center)
+            instance = Center.objects.get_or_create(name=center)
+            instance.full_access = True
+            instance.save()
         print("There are a total of %s centers." % Center.objects.count())

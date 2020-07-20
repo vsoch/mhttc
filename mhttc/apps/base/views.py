@@ -17,7 +17,6 @@ from itertools import chain
 
 from mhttc.settings import VIEW_RATE_LIMIT as rl_rate, VIEW_RATE_LIMIT_BLOCK as rl_block
 
-from django.shortcuts import render
 
 # Custom 404/500 views
 

@@ -8,15 +8,11 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.urls import reverse
 
 from django.db import models
 
-import os
 import uuid
 
 ################################################################################
@@ -108,6 +104,14 @@ class User(AbstractUser):
     # Ensure that we can add staff / superuser and retain on logout
     objects = CustomUserManager()
 
+    def has_full_access(self):
+        """Determine if the user has full access to the interweb, meaning they
+           can see more than projects
+        """
+        if not self.center:
+            return False
+        return self.center.full_access
+
     class Meta:
         app_label = "users"
 
@@ -129,6 +133,9 @@ class Center(models.Model):
         related_query_name="center_owners",
         help_text="Administrators of the center.",
     )
+    full_access = models.BooleanField(
+        default=False, help_text="The center has full access to the interweb."
+    )
     created_at = models.DateTimeField("date of creation", auto_now_add=True)
     updated_at = models.DateTimeField("date of last update", auto_now=True)
 
@@ -138,45 +145,6 @@ class Center(models.Model):
         """
         if self.name is not None:
             return self.name.lower().replace(" ", "-")
-
-    def get_members(self):
-        """ get a list of unique members, including both contributors and owners
-        """
-        members = chain(self.owners.all(), self.members.all())
-        return list(set(list(members)))
-
-    def get_invite(self, code):
-        """ get the invitation for a user, if it exists.
- 
-            Parameters
-            ==========
-            code: the code to validate the invitation
-        """
-        keyargs = {"code": code, "team": self}
-        try:
-            invite = MembershipInvite.objects.get(**keyargs)
-        except MembershipInvite.DoesNotExist:
-            return None
-        else:
-            return invite
-
-    def add_member(self, user, code=None):
-        """add a user to a team. If a code is provided,
-        the invitation object is deleted.
-        Parameters 
-        ==========
-        user: the user to add as a member
-        code: if provided, ensure valid, then delete
-        """
-        if code is not None:
-            invitation = self.get_invite(code)
-            if invitation is not None:
-                invitation.delete()
-
-        # Finally, add the user
-        self.members.add(user)
-        self.save()
-        return self
 
     def has_edit_permission(self, request):
         """ determine if a user has edit permission for a team.
@@ -196,19 +164,6 @@ class Center(models.Model):
 
     def get_absolute_url(self):
         return reverse("center_details", args=[str(self.id)])
-
-    def has_member(self, username):
-        """return True if the username is either a member or owner for the team
-          
-        Parameters
-        ==========
-        username: the username to check
-        """
-        members = self.get_members()
-        names = [x.username for x in members]
-        if username in names:
-            return True
-        return False
 
     def __str__(self):
         return "%s" % self.name

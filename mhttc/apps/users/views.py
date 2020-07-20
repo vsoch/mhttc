@@ -18,10 +18,9 @@ from mhttc.settings import (
 )
 
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import (
-    UserCreationForm,
     AuthenticationForm,
     PasswordChangeForm,
 )
@@ -33,7 +32,6 @@ from django.contrib import messages
 
 from django.shortcuts import get_object_or_404, render, redirect
 from ratelimit.decorators import ratelimit
-from social_core.exceptions import AuthForbidden
 from django.utils import timezone
 from uuid import uuid4
 
