@@ -16,10 +16,8 @@ If the user hits a 404 (page not found) we show them a custom view:
 
 ![404.png]({{ site.baseurl }}/docs/usage/img/404.png)
 
-If the user triggers a server error, we show them a different view:
+If the user triggers a server error, we show them a modified version of the above
+with a different graphic.
 
-![500.png]({{ site.baseurl }}/docs/usage/img/500.png)
-
-There is currently no backend error logging configured, but this can be easily 
-setup to alert us when the user triggers an error (for example, [Sentry](https://sentry.io) is
-a good service).
+Errors are sent to [Sentry](https://sentry.io) if you've defined the `SENTRY_ID`
+in your environment.
