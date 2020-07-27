@@ -37,7 +37,7 @@ class Command(BaseCommand):
         # The listing above is the 13 that should have full access
         for center in centers:
             print("Creating center %s" % center)
-            instance = Center.objects.get_or_create(name=center)
+            instance, _ = Center.objects.get_or_create(name=center)
             instance.full_access = True
             instance.save()
         print("There are a total of %s centers." % Center.objects.count())

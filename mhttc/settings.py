@@ -24,7 +24,14 @@ HELP_CONTACT_EMAIL = os.environ.get("HELP_CONTACT_EMAIL")
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDGRID_SENDER_EMAIL = os.environ.get("SENDGRID_SENDER_EMAIL", HELP_CONTACT_EMAIL)
 
-DOMAIN_NAME = "http://127.0.0.1:8000"
+GCP_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT")
+REGION_ID = os.environ.get("GAE_APPLICATION")
+if not GCP_PROJECT or not REGION_ID:
+    DOMAIN_NAME = "http://127.0.0.1:8000"
+else:
+    DOMAIN_NAME = "https://%s.%s.r.appspot.com" % (GCP_PROJECT, REGION_ID)
+print(DOMAIN_NAME)
+
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = DOMAIN_NAME
 
 # Quick-start development settings - unsuitable for production
@@ -109,8 +116,7 @@ import pymysql  # noqa: 402
 pymysql.version_info = (1, 4, 6, "final", 0)  # change mysqlclient version
 pymysql.install_as_MySQLdb()
 
-# [START db_setup]
-if os.getenv("GAE_APPLICATION", None):
+if os.getenv("MYSQL_HOST") is not None:
     # Running on production App Engine, so connect to Google Cloud SQL using
     # the unix socket at /cloudsql/<your-cloudsql-connection string>
     DATABASES = {
@@ -120,6 +126,7 @@ if os.getenv("GAE_APPLICATION", None):
             "USER": os.environ.get("MYSQL_USER"),
             "PASSWORD": os.environ.get("MYSQL_PASSWORD"),
             "NAME": os.environ.get("MYSQL_DATABASE"),
+            "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
         }
     }
 else:

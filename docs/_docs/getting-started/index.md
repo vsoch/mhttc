@@ -66,7 +66,14 @@ the repository:
 cp .dummy-env .env
 ```
 
-and then populate the following configuration variables into that file.
+and also copy the app-example.yaml to an app.yaml file (that will contain secrets and not be
+included in the repository):
+
+```bash
+cp app-example.yaml app.yaml
+```
+
+For local development, you will want to populate the following configuration variables the the .env file:
 
 #### Secret Key
 
@@ -187,7 +194,7 @@ rm db.sqlite3
 For deployment, you'll need to first create your database in cloud managed sql,
 and export these environment variables in your local .env file:
 
-```
+```bash
 export MYSQL_HOST=<the.hostname>
 export MYSQL_USER=<dbusername>
 export MYSQL_PASSWORD=<dbpassword>
@@ -197,8 +204,8 @@ export MYSQL_DATABASE=<databasename>
 And then at the onset of development, you'll need to both make and run migrations.
 
 ```bash
-make migrate
 make migrations
+make migrate
 ```
 
 ### Development
@@ -274,6 +281,162 @@ And then you can open up your browser to [http://localhost:8000](http://localhos
 
 ### Deployment
 
-https://cloud.google.com/python/django/appengine#deploying_the_app_to_the_standard_environment_
+#### 1. Request Stanford AFS
 
-<hr>
+If you don't have a group on Stanford AFS, then you should [first request one](https://uit.stanford.edu/service/afs). This typically
+maps to a folder in the Stanford AFS web space, and we need this space to create a database there.
+
+#### 2. Request Stanford Managed SQL
+
+Once you have the folder, you can self-request [Stanford managed SQL](https://uit.stanford.edu/service/sql).
+and the screen will take you immediately to a page with credentials to write into your .env file (for local setup)
+and your app.yaml (for deployment, discussed next).
+
+#### 3. Populate app.yaml
+
+The app.yaml file that you created from the app-example.yaml (which you absolutely should not
+put environment variables in) should be populated with your environment variables from the .env
+file, along with your database credentials. As stated above, since we want to initialize the database from
+our local machine, we should also write them to the .env file.
+
+#### 4. Remove Migrations
+
+Since we are starting with a fresh database, we can safely remove the many migrations that we made
+for testing.
+
+```bash
+rm -rf mhttc/apps/users/migrations/
+rm -rf mhttc/apps/main/migrations
+```
+
+#### 5. Setup Database Locally
+
+If you haven't already, source your environment with the newly added database:
+
+```bash
+source env/bin/activate
+source .env
+```
+
+And then collect static, make migrations, and migrate. This should again create new
+database tables.
+
+```bash
+make collect
+make migrations
+make migrate
+```
+
+You can then run the server locally (using the now relational database instead of sqlite)
+and see the interface. You can add yourself (and another if needed) as a superuser:
+
+```bash
+python manage.py createsuperuser
+```
+
+You can also create the default "sister" 13 centers:
+
+```bash
+$ python manage.py create_centers
+Creating Centers:
+
+Creating center MHTTC Network Coordinating Office
+Creating center National American Indian & Alaska Native MHTTC
+Creating center National Hispanic & Latino MHTTC
+Creating center New England MHTTC
+Creating center Northeast & Caribbean MHTTC
+Creating center Central East MHTTC
+Creating center Southeast MHTTC
+Creating center Great Lakes MHTTC
+Creating center South Southwest MHTTC
+Creating center Mid-America MHTTC
+Creating center Mountain Plains MHTTC
+Creating center Pacific Southwest MHTTC
+Creating center Northwest MHTTC
+There are a total of 13 centers.
+```
+
+And remember if you want someone to be added to the admin console, they need to be
+added as follows:
+
+```bash
+python manage.py add_superuser <username>
+```
+
+#### 6. Add your Center
+
+Since we added ourselves as users to the interface, we will want to
+edit our user to be associated with a center in the admin console. You can
+edit users at `<hostname>/admin/users/user/` (`http://127.0.0.1:8000/admin/users/user/`).
+You won't need to do this for all subsequent users that are invited via email,
+as they will select their center upon registration.
+
+#### 7. Test the local interface
+
+And then log in to the interface! It's good to look/test things now locally
+before deployment to make sure it works as expected.
+
+```bash
+make run
+```
+
+#### 8. Deploy
+
+When you are ready, let's deploy to app engine! Remember that your app.yaml
+should be entirely populated. This is where your `.gcloudignore` is important -
+anything that you don't want uploaded to your project should be written there.
+If you have been working on other projects, make sure that the project
+associated with the MHTTC server is active:
+
+```bash
+$ gcloud config set project <myproject>
+```
+
+```bash
+$ gcloud app create --project=<myproject>
+```
+
+If you get a permission denied:
+
+```bash
+ERROR: (gcloud.app.create) PERMISSION_DENIED: The caller does not have permission
+```
+
+then you should go the IAM and Admin tab and ensure that the account associated with
+your user email (on your local machine) has proper permissions.
+When you are ready, deploy your app!
+
+```bash
+$ gcloud app deploy
+Initializing App Engine resources...done.                                                                                                
+Services to deploy:
+
+...
+```
+
+In the above we see:
+
+ - a confirmation of app metadata
+ - files uploaded to Google Storage
+ - the final deployed URL.
+ - commands to show logs, or open to the url (browse).
+
+Note that the .gcloudignore file is important to not upload your docs, Python environment,
+or other metadata or secrets. Speaking of environment variables, if you need additional ones 
+ you can add them to your [app.yml file](https://cloud.google.com/appengine/docs/standard/python/config/appref). Indeed, if you needed to write all of these functions (e.g., build a container, have static files uploaded to storage, etc.) it would have been very cumbersome. But this deployment is in fact incredibly easy! App Engine is great because you pay for what you use, and
+the base containers are maintained for you. And a few final tips:
+
+ - if you need to re-do the storage upload, you can delete the buckets entirely (both for staging and production) and they will be re-generated.
+
+## Cleaning Up
+
+You should navigate to App Engine --> Settings and then click on "Disable Application" to permanently disable it.
+Cleaning up also then means:
+
+ - deleting the production and staging storage buckets for your app
+ - deleting the storage artifacts bucket (e.g., logs) if they are not needed.
+
+Remember, your app.yml that has environment variables  **must not be added to a public
+GitHub repository, or even a private one for that matter!**
+
+The complete details for this deployment are [here](https://cloud.google.com/python/django/appengine#deploying_the_app_to_the_standard_environment_).

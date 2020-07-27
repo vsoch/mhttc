@@ -4,3 +4,4 @@ env
 static
 migrations
 __pycache__
+Gemfile.lock

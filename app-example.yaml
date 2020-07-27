@@ -1,0 +1,28 @@
+runtime: python38
+
+# You'll need to define these from your .env file, and *do not put on GitHub*
+# You can remove any that you don't want to define (e.g., FACEBOOK_USERNAME)
+env_variables:
+  DJANGO_SECRET_KEY: 123456
+  TWITTER_USERNAME: username
+  INSTAGRAM_USERNAME: username
+  FACEBOOK_USERNAME: username
+  MYSQL_HOST: host
+  MYSQL_USER: user
+  MYSQL_PASSWORD: password
+  MYSQL_DATABASE: database
+  SENDGRID_API_KEY: apikey
+  SENDGRID_SENDER_EMAIL: email
+  HELP_CONTACT_EMAIL: email
+
+handlers:
+# This configures Google App Engine to serve the files in the app's static
+# directory.
+- url: /static
+  static_dir: static/
+
+# This handler routes all requests not caught above to your main app. It is
+# required when static routes are defined, but can be omitted (along with
+# the entire handlers section) when there are no static files defined.
+- url: /.*
+  script: auto
