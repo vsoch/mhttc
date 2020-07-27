@@ -6,3 +6,5 @@ django-gravatar2==1.4.4
 django-bootstrap-datepicker-plus==3.0.5
 reportlab==3.5.44
 sendgrid==6.4.3
+requests==2.24.0
+sentry-sdk==0.16.2

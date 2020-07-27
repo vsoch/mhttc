@@ -208,6 +208,17 @@ make migrations
 make migrate
 ```
 
+### Sentry for Monitoring
+
+We can create a few account on [sentry.io](https://sentry.io/) to set up logging
+for our application, and be alerted if there are any errors. The steps there will
+walk you through setup, although you primarily just need to export the id number
+as `SENTRY_ID` in your local .env and app.yaml.
+
+```bash
+export SENTRY_ID=https://xxxxxxxxxxxxxxxxxxxxxxxxxxx.ingest.sentry.io/111111
+```
+
 ### Development
 
 To develop locally, you'll want to create a local environment and then install
@@ -380,7 +391,30 @@ before deployment to make sure it works as expected.
 make run
 ```
 
-#### 8. Deploy
+#### 8. Google Cloud Permissions
+
+Make sure that app engine is enabled, and that your user account (the email
+associated with your project) has create permissions for it. If you don't,
+you will get a permission denied:
+
+```bash
+ERROR: (gcloud.app.create) PERMISSION_DENIED: The caller does not have permission
+```
+
+then you should go the IAM and Admin tab and ensure that the account associated with
+your user email (on your local machine) has proper permissions. If when you are doing 
+the deployment you get a similar error:
+
+```bash
+ERROR: (gcloud.app.deploy) Error Response: [9] Cloud build 99bd2f7d-b098-41a8-9841-xxxxxxxx status: FAILURE
+Build error details: Access to bucket staging.<project>.appspot.com denied. You must grant Storage Object Viewer permission to xxxxxxxx@cloudbuild.gserviceaccount.com.
+```
+
+Then simply follow the instruction! Google permissions are kind of hairy, and
+I've seen different behavior over time. It's best to grant the minimal permissions
+you think are needed, and then adjust if necessary based on these messages.
+
+#### 9. Deploy
 
 When you are ready, let's deploy to app engine! Remember that your app.yaml
 should be entirely populated. This is where your `.gcloudignore` is important -
@@ -396,14 +430,6 @@ $ gcloud config set project <myproject>
 $ gcloud app create --project=<myproject>
 ```
 
-If you get a permission denied:
-
-```bash
-ERROR: (gcloud.app.create) PERMISSION_DENIED: The caller does not have permission
-```
-
-then you should go the IAM and Admin tab and ensure that the account associated with
-your user email (on your local machine) has proper permissions.
 When you are ready, deploy your app!
 
 ```bash
@@ -411,7 +437,29 @@ $ gcloud app deploy
 Initializing App Engine resources...done.                                                                                                
 Services to deploy:
 
-...
+descriptor:      [/home/vanessa/Desktop/Code/mhttc-web/app.yaml]
+source:          [/home/vanessa/Desktop/Code/mhttc-web]
+target project:  [project]
+target service:  [default]
+target version:  [xxxxxxxxx]
+target url:      [https://<project>.<region_id>.r.appspot.com]
+
+Do you want to continue (Y/n)?  y
+
+Beginning deployment of service [default]...
+╔════════════════════════════════════════════════════════════╗
+╠═ Uploading 313 files to Google Cloud Storage                ═╣
+╚════════════════════════════════════════════════════════════╝
+File upload done.
+Updating service [default]...done.                                             
+Setting traffic split for service [default]...done.                            
+Deployed service [default] to [https://som-mhttcnco.uc.r.appspot.com]
+
+You can stream logs from the command line by running:
+  $ gcloud app logs tail -s default
+
+To view your application in the web browser run:
+  $ gcloud app browse
 ```
 
 In the above we see:

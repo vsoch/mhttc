@@ -11,7 +11,6 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from django.urls import path
 from django.conf.urls import url, include
 import mhttc.apps.users.views as views
-from social_django import urls as social_urls
 
 urlpatterns = [
     # Twitter, and social auth
@@ -19,7 +18,6 @@ urlpatterns = [
     url(r"^accounts/login/$", views.login),
     url(r"^logout/$", views.logout, name="logout"),
     url(r"^password/$", views.change_password, name="change_password"),
-    url("", include(social_urls, namespace="social")),
     url(r"^terms/agree", views.agree_terms, name="agree_terms"),
     url(r"^u/delete$", views.delete_account, name="delete_account"),  # delete account
     url(r"^u/profile", views.view_profile, name="profile"),

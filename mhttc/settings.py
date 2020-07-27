@@ -24,13 +24,8 @@ HELP_CONTACT_EMAIL = os.environ.get("HELP_CONTACT_EMAIL")
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDGRID_SENDER_EMAIL = os.environ.get("SENDGRID_SENDER_EMAIL", HELP_CONTACT_EMAIL)
 
-GCP_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT")
-REGION_ID = os.environ.get("GAE_APPLICATION")
-if not GCP_PROJECT or not REGION_ID:
-    DOMAIN_NAME = "http://127.0.0.1:8000"
-else:
-    DOMAIN_NAME = "https://%s.%s.r.appspot.com" % (GCP_PROJECT, REGION_ID)
-print(DOMAIN_NAME)
+# You likely will need to set the domain name after it's been allocated
+DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "http://127.0.0.1:8000")
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = DOMAIN_NAME
 
@@ -43,6 +38,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+if os.environ.get("GAE_APPLICATION") is not None:
+    DEBUG = False
 
 # Custom user model
 AUTH_USER_MODEL = "users.User"
@@ -101,8 +98,24 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATES[0]["OPTIONS"]["debug"] = True
+TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG
 WSGI_APPLICATION = "mhttc.wsgi.application"
+
+
+# Sentry for Monitoring
+
+SENTRY_ID = os.environ.get("SENTRY_ID")
+if SENTRY_ID is not None:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_ID,
+        integrations=[DjangoIntegration()],
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+    )
 
 
 # Database

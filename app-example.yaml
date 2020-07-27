@@ -14,6 +14,8 @@ env_variables:
   SENDGRID_API_KEY: apikey
   SENDGRID_SENDER_EMAIL: email
   HELP_CONTACT_EMAIL: email
+  SENTRY_ID: xxxxxxxxxx
+  DOMAIN_NAME: https://<project>.<region_id>.r.appspot.com
 
 handlers:
 # This configures Google App Engine to serve the files in the app's static
