@@ -235,7 +235,7 @@ def new_training(request):
             training = form.save(commit=False)
             training.center = request.user.center
             training.save()
-            return redirect("traiing_details", uuid=training.uuid)
+            return redirect("training_details", uuid=training.uuid)
     else:
         form = TrainingForm()
     return render(request, "training/new_training.html", {"form": form})
