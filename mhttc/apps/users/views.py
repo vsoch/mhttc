@@ -34,6 +34,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from ratelimit.decorators import ratelimit
 from django.utils import timezone
 from uuid import uuid4
+import re
 
 ## Centers
 
@@ -120,6 +121,7 @@ def invited_user(request, uuid):
             user.set_password(password1)
             user.uuid = uuid4()
             user.active = True
+            user.center = center
             user.save()
             auth_login(request, user)
             messages.info(request, f"You are now logged in as {user.username}")
@@ -152,11 +154,19 @@ def invite_users(request):
             if not email:
                 continue
 
+            # Allow user to provide an email copy pasted with name <email>
+            match = re.search(
+                "([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})", email
+            )
+            if not match:
+                continue
+
             # We create users with emails as username
+            email = match.group()
             user, created = User.objects.get_or_create(username=email, email=email)
 
             # If we resend an invite, we generate a new password
-            if created and resend_invite or not created:
+            if not created and resend_invite or created:
                 user.active = False
                 password = generate_random_password()
                 user.set_password(password)
@@ -170,7 +180,7 @@ def invite_users(request):
                 )
                 if send_email(
                     request=request,
-                    email_to=email,
+                    email_to=user.email,
                     message=message,
                     subject="[MHTTC] Your are invited to join the Mental Health Technology Transfer Network",
                 ):
