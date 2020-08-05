@@ -137,10 +137,20 @@ def edit_form_template(request, uuid, stage=1):
                 strategy_units = strategy["strategy_units_%s" % index].strip()
                 strategy_frequency = strategy["strategy_frequency_%s" % index].strip()
 
+                if (
+                    not strategy_type
+                    and not strategy_format
+                    and not strategy_units
+                    and not strategy_frequency
+                ):
+                    continue
+
                 new_strategy = Strategy.objects.create(
                     strategy_type=strategy_type,
                     strategy_format=strategy_format,
-                    planned_number_units=int(strategy_units),
+                    planned_number_units=int(strategy_units)
+                    if strategy_units
+                    else None,
                     frequency=strategy_frequency,
                 )
                 new_strategies.append(new_strategy)
@@ -155,7 +165,7 @@ def edit_form_template(request, uuid, stage=1):
             if project.stage != 3:
                 project.stage += 1
                 form.stage = project.stage
-            project.form = form
+            project.form = template
             project.save()
 
             return redirect("center_details", uuid=project.center.id)
