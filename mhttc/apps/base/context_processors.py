@@ -21,4 +21,5 @@ def social_processor(request):
         "FACEBOOK_USERNAME": settings.FACEBOOK_USERNAME,
         "INSTAGRAM_USERNAME": settings.INSTAGRAM_USERNAME,
         "GOOGLE_ANALYTICS_ID": settings.GOOGLE_ANALYTICS_ID,
+        "HELP_CONTACT_EMAIL": settings.HELP_CONTACT_EMAIL,
     }

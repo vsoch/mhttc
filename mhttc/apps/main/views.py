@@ -26,7 +26,7 @@ from mhttc.apps.main.forms import (
     CertificateForm,
 )
 from mhttc.apps.main.utils import make_certificate_response
-
+import re
 
 ## Projects
 
@@ -303,9 +303,21 @@ def training_details(request, uuid):
             emails = request.POST.get("emails", "")
             for email in emails.split("\n"):
 
+                # Any weird newlines
                 email = email.strip()
+
+                # Skip empty lines
                 if not email:
                     continue
+
+                # Allow user to provide an email copy pasted with name <email>
+                match = re.search(
+                    "([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})", email
+                )
+                if not match:
+                    continue
+                email = match.group()
+
                 participant, created = TrainingParticipant.objects.get_or_create(
                     training=training, email=email
                 )

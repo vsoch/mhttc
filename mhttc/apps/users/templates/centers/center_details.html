@@ -8,6 +8,7 @@
     <div class="col-md-12" style="padding-bottom:20px">
       <h1>{{ center.name }}</h1>
       <h4>
+      <a href="{% url 'all_centers' %}">< centers</a>
     </div>
   </div>
   {% if request.user.is_superuser and request.user.is_staff %}<div class="row" style="margin-bottom:20px">
@@ -47,6 +48,20 @@
               </tr>
 	    </tbody>
 	   </table>
+
+           {% if center.user_set.count > 0 %}<h3>People</h3>
+	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
+	      <tr>
+	       <th>Login</th>
+	      </tr>
+	    </thead>
+	      <tbody>
+              {% for user in center.user_set.all %}<tr>
+                 <td>{{ user.username }}</td>
+              </tr>{% endfor %}
+	    </tbody>
+	   </table>{% endif %}
+
             </div>
             {% if center.project_set.count > 0 %}<div class="tab-pane fade" id="nav-projects" role="tabpanel" aria-labelledby="nav-projects-tab">
                {% include "projects/projects_table.html" with projects=center.project_set.all %}

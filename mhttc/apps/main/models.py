@@ -74,10 +74,10 @@ class TrainingParticipant(models.Model):
                 reverse("download_certificate", args=[training.uuid]),
             )
             message = (
-                "Congratulations! You've completed a training at a Mental Health Technology Transfer Network Center!\n"
+                "Congratulations! You've completed the training '%s' at a Mental Health Technology Transfer Network Center!\n"
                 "You can visit %s to download your certificate.\n\n"
                 "If this message was in error, please respond to this email and let us know."
-                % url
+                % (training.name, url)
             )
             if send_email(
                 email_to=self.email,
