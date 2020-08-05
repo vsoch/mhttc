@@ -9,7 +9,7 @@
     <tbody>{% for project in projects %}
         <tr>
             <td><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></td>
-            <td>{{ project.description | truncatechars:100 }}</td>
+            <td style="white-space: break-spaces">{{ project.description | truncatechars:100 }}</td>
             <td><a href="{{ project.get_absolute_url }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
                 <a target="_blank" href="{% url 'view_project_form' project.uuid %}"><button type="button" class="btn btn-primary btn-sm" {% if project.form %}{% else %}disabled{% endif %}>View</button></a></td>
         </tr>{% endfor %}

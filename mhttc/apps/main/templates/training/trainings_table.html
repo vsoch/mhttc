@@ -11,7 +11,7 @@
     <tbody>{% for training in trainings %}
         <tr>
             <td><a href="{% url 'training_details' training.uuid %}">{{ training.name }}</a></td>
-            <td>{{ training.description | truncatechars:100 }}</td>
+            <td style="white-space: break-spaces">{{ training.description | truncatechars:100 }}</td>
             <td></td>
             <td></td>
             <td></td>

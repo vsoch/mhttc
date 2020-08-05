@@ -172,14 +172,15 @@ def edit_form_template(request, uuid, stage=1):
         if project.form is not None:
             form = FormTemplateForm(initial=model_to_dict(project.form))
         form.stage = project.stage
+
+    strategies = None
+    if project.form is not None and project.form.implement_strategy is not None:
+        strategies = project.form.implement_strategy.all()
+
     return render(
         request,
         "projects/edit_form_template.html",
-        {
-            "form": form,
-            "project": project,
-            "strategies": project.form.implement_strategy.all(),
-        },
+        {"form": form, "project": project, "strategies": strategies,},
     )
 
 
