@@ -181,6 +181,9 @@ class FormTemplate(models.Model):
     )
 
     # 2. Target audience (WHO)
+    target_audience_who = models.TextField(
+        blank=False, help_text="Who is the audience (including type of organizations)"
+    )
     target_audience_disciplines = models.TextField(
         blank=False, help_text="Specify discipline(s)"
     )

@@ -9,7 +9,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from ratelimit.decorators import ratelimit
 
 from django.contrib.auth.decorators import login_required
@@ -99,16 +99,19 @@ def edit_form_template(request, uuid, stage=1):
     except Project.DoesNotExist:
         raise Http404
 
+    # If a post is done, a JSONresponse must be returned to update the user
     if request.method == "POST":
 
         # If the form already belongs to another center
         if project.center != None and project.center != request.user.center:
-            messages.warning(
-                request, "You are not allowed to edit a form not owned by your center.",
+            return JsonResponse(
+                {
+                    "message": "You are not allowed to edit a form not owned by your center."
+                }
             )
-            return redirect("index")
 
         # Get standard form fields
+        print(request.POST)
         form = FormTemplateForm(request.POST)
         form.stage = project.stage
 
@@ -167,15 +170,12 @@ def edit_form_template(request, uuid, stage=1):
                 form.stage = project.stage
             project.form = template
             project.save()
-
-            return redirect("center_details", uuid=project.center.id)
+            return JsonResponse({"message": "Your project was saved successfully."})
 
         # Not valid - return to page to populate
         else:
-            return render(
-                request,
-                "projects/edit_form_template.html",
-                {"form": form, "project": project},
+            return JsonResponse(
+                {"message": "The form is not valid, errors: %s" % form.errors}
             )
     else:
         form = FormTemplateForm()
@@ -200,7 +200,10 @@ def edit_form_template(request, uuid, stage=1):
 def view_project_form(request, uuid):
     try:
         project = Project.objects.get(uuid=uuid)
-        form = FormTemplateForm(initial=model_to_dict(project.form))
+
+        form = FormTemplateForm()
+        if project.form is not None:
+            form = FormTemplateForm(initial=model_to_dict(project.form))
 
         # If the form already belongs to another center
         if project.center != None and project.center != request.user.center:
@@ -209,9 +212,11 @@ def view_project_form(request, uuid):
             )
             return redirect("index")
 
+        # If the form isn't started yet...
         if project.form == None:
             messages.info(request, "This project does not have a form started yet.")
             return redirect("project_details", project.uuid)
+
         return render(
             request,
             "projects/view_project_form.html",

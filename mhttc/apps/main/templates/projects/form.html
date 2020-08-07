@@ -21,14 +21,18 @@
     <br>
     <h2>2. Target Audience (WHO)</h2>
     <div class="form-group">
-        <label for="id_target_audience_disciplines">a) Specify target audience disciplines:</label>
-        <textarea name="target_audience_disciplines" cols="40" rows="5" class="form-control" required id="id_target_audience_disciplines" {% if disabled %}disabled{% endif %}>{{ form.target_audience_disciplines.value|default_if_none:"" }}</textarea> 
+        <label for="id_target_audience_who">a) Who is the audience (including type of organizations):</label>
+        <textarea name="target_audience_who" cols="40" rows="1" class="form-control" required id="id_target_audience_who" {% if disabled %}disabled{% endif %}>{{ form.target_audience_who.value|default_if_none:"" }}</textarea> 
     </div>
     <div class="form-group">
-        <label for="id_target_audience_roles">b) Specify roles:</label>
-        <textarea name="target_audience_roles" cols="40" rows="5" class="form-control" required id="id_target_audience_roles" {% if disabled %}disabled{% endif %}>{{ form.target_audience_roles.value|default_if_none:"" }}</textarea>
+        <label for="id_target_audience_disciplines">b) Specify discipline(s):</label>
+        <textarea name="target_audience_disciplines" cols="40" rows="1" class="form-control" required id="id_target_audience_disciplines" {% if disabled %}disabled{% endif %}>{{ form.target_audience_disciplines.value|default_if_none:"" }}</textarea> 
     </div>
-    <label>c) Specify audience relationship to one another (Select all that apply):</label>
+    <div class="form-group">
+        <label for="id_target_audience_roles">c) Specify roles:</label>
+        <textarea name="target_audience_roles" cols="40" rows="1" class="form-control" required id="id_target_audience_roles" {% if disabled %}disabled{% endif %}>{{ form.target_audience_roles.value|default_if_none:"" }}</textarea>
+    </div>
+    <label>d) Specify audience relationship to one another (Select all that apply):</label>
     <br><br>
      <div class="form-group">
          <span style="padding-right:20px" class="helptext">Multiple individuals across organizations:</span>
@@ -54,7 +58,7 @@
     </div>
     <hr>
     <h2>3. Implementation Strategy (HOW)</h2>{% if disabled %}{% else %}
-    <p>Determine which of the following best describe the implementation strategies used in your project. They may be discrete, or multicomponent, or both. Then fill in the table below with your selections.</p>
+    <p>Implementation strategies are the training and technical assistance services that you provide as part of the project. Determine which of the following categories best describe(s) the implementation strategies used in your project. Then fill in the table below.</p>
 <ul class="list-group">
   <li class="list-group-item"><strong>Evaluative and iterative strategies</strong><br> (e.g., Assess for readiness; Identify barriers and facilitators; Audit and feedback)</li>
   <li class="list-group-item"><strong>Interactive assistance</strong><br> (e.g., Facilitation; Technical assistance; Coaching; Clinical Supervision; Mentoring)</li>
@@ -125,7 +129,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="id_implement_strategy_description">Implement strategy description:</label>
+        <label for="id_implement_strategy_description">Provide a description of the how the implementation strategies will occur:</label>
         <textarea name="implement_strategy_description" cols="40" rows="5" class="form-control" required id="id_implement_strategy_description" {% if disabled %}disabled{% endif %}>{{ form.implement_strategy_description.value|default_if_none:"" }}</textarea> <span class="helptext">Free Text Description (Provide a Description of the Planned Implementation Steps)</span>
     </div>
 
@@ -134,19 +138,16 @@
     <h2>4. Contextual/determinant Considerations</h2>
     <p>(What facilitators {% if project.stage == 1 %}are anticipated{% elif project.stage == 2 %}are present{% else %}were present{% endif %} to aid implementation and barriers that {% if project.stage == 1 %} could hinder{% elif project.stage == 2 %}have hindered{% else %} hindered{% endif %} implementation?)</p>
     <div class="form-group">
-        <label for="id_consider_system_factors">Consider system factors:</label>
+        <label for="id_consider_system_factors">a) System factors--external to the organization (e.g., financing; mandates, community, culture):</label>
         <textarea name="consider_system_factors" cols="40" rows="5" class="form-control" required id="id_consider_system_factors" {% if disabled %}disabled{% endif %}>{{ form.consider_system_factors.value|default_if_none:"" }}</textarea>
-         <span class="helptext">System factors--external to the organization (e.g., financing; mandates, community, culture)</span>
     </div>
     <div class="form-group">
-        <label for="id_consider_org_factors">Consider organizational factors:</label> 
+        <label for="id_consider_org_factors">b) Organizational factors—internal to the organization (e.g., leadership; readiness):</label> 
         <textarea name="consider_org_factors" cols="40" rows="5" class="form-control" required id="id_consider_org_factors" {% if disabled %}disabled{% endif %}>{{ form.consider_org_factors.value|default_if_none:"" }}</textarea> 
-        <span class="helptext">Organizational factors—internal to the organization (e.g., leadership; readiness)</span>
     </div>
     <div class="form-group">
-        <label for="id_consider_clinical_factors">Consider clinical factors:</label>
+        <label for="id_consider_clinical_factors">c) Individual clinician factors (e.g., alignment with existing practice; complexity):</label>
         <textarea name="consider_clinical_factors" cols="40" rows="5" class="form-control" required id="id_consider_clinical_factors" {% if disabled %}disabled{% endif %}>{{ form.consider_clinical_factors.value|default_if_none:"" }}</textarea>
-        <span class="helptext">Individual clinician factors (e.g., alignment with existing practice; complexity)</span>
     </div>
     {% if project.stage > 1 %}<div class="form-group">
 	<label for="id_consider_sustainment_strategy">Consider sustainment strategy:</label>
@@ -157,19 +158,16 @@
     <br>
     <h2>5. Implementation Process</h2>
     <div class="form-group">
-        <label for="id_implementation_recruited">Implementation recruited:</label> 
+        <label for="id_implementation_recruited">a) How will participants be recruited?</label> 
         <textarea name="implementation_recruited" cols="40" rows="5" class="form-control" required id="id_implementation_recruited" {% if disabled %}disabled{% endif %}>{{ form.implementation_recruited.value|default_if_none:"" }}</textarea>
-        <span class="helptext">a) How will participants be recruited?</span>
     </div>
     {% if project.stage > 1 %}<div class="form-group">
-        <label for="id_implementation_participants">Implementation participants:</label> 
+        <label for="id_implementation_participants">b) How many participants are enrolled?</label> 
         <input value='{{ form.implementation_participants.value|default_if_none:"0" }}' step="1" type="number" name="implementation_participants" min="0" class="form-control" required id="id_implementation_participants" {% if disabled %}disabled{% endif %}> 
-        <span class="helptext">b) How many participants are enrolled?</span>
     </div>
     <div class="form-group">
-        <label for="id_implementation_enrolled">Implementation enrolled:</label> 
+        <label for="id_implementation_enrolled">c) # (%) initiating implementation strategy (individuals, teams or organizations</label> 
         <input value='{{ form.implementation_enrolled.value|default_if_none:"0" }}' type="number" name="implementation_enrolled" min="0" class="form-control" step="1" required id="id_implementation_enrolled" {% if disabled %}disabled{% endif %}> 
-        <span class="helptext">c) # (%) initiating implementation strategy (individuals, teams or organizations</span>
     </div>{% endif %}
 
     {% if project.stage > 2 %}<div class="form-group">
@@ -198,13 +196,13 @@
         </thead>
         <tbody class="list">     
             <tr>
-                <td class="outcome">a) Reach (# or percentage of population, what is the population, and how will you be measuring the outcome?</td>
-                <td contenteditable="true" class="measure">
+                <td class="outcome">a) Reach (number of consumers who received the EBP. Ideally you might also know the number who were eligible to receive the EBP to calculate a percent)</td>
+                <td tabindex="-1" contenteditable="true" class="measure">
 		    <div class="form-group">
 		        <textarea name="outcome_reach" cols="40" rows="5" class="form-control" required id="id_outcome_reach" {% if disabled %}disabled{% endif %}>{{ form.outcome_reach.value|default_if_none:"" }}</textarea>
 		     </div>
                 </td>
-                {% if project.stage > 1 %}<td contenteditable="true" class="results">
+                {% if project.stage > 1 %}<td contenteditable="true" class="results" tabindex="-1">
 		  <div class="form-group">
                       <textarea name="results_reach" cols="40" rows="5" class="form-control" required id="id_results_reach" {% if disabled %}disabled{% endif %}>{{ form.results_reach.value|default_if_none:"" }}</textarea>
 		   </div>
@@ -212,26 +210,26 @@
             </tr>
 
             <tr>
-                <td class="outcome">b) Effectiveness of Intervention/Program/Services (w/consumers), how do you measure it?</td>
-                <td contenteditable="true" class="measure">
+                <td class="outcome">b) Effectiveness of Intervention/Program/Services (w/consumers)</td>
+                <td contenteditable="true" class="measure" tabindex="-1">
 		    <div class="form-group">
 			 <textarea name="outcome_effectiveness" cols="40" rows="5" class="form-control" required id="id_outcome_effectiveness" {% if disabled %}disabled{% endif %}>{{ form.outcome_effectiveness.value|default_if_none:"" }}</textarea>
 		    </div>
                 </td>
-                {% if project.stage > 1 %}<td contenteditable="true" class="results">
+                {% if project.stage > 1 %}<td contenteditable="true" class="results" tabindex="-1">
 		    <div class="form-group"><textarea name="results_effectiveness" cols="40" rows="5" class="form-control" required id="id_results_effectiveness" {% if disabled %}disabled{% endif %}>{{ form.results_effectiveness.value|default_if_none:"" }}</textarea>
 		</div>
                 </td>{% endif %}
             </tr>
 
             <tr>
-                <td class="outcome">c) Adoption (#/% of providers)</td>
-                <td contenteditable="true" class="measure">
+                <td class="outcome">c) Adoption (number of providers who started using the EBP. Ideally you would also know the total number of providers to calculate a percent.)</td>
+                <td contenteditable="true" class="measure" tabindex="-1">
 		    <div class="form-group">
 			<textarea name="outcome_adoption" cols="40" rows="5" class="form-control" required id="id_outcome_adoption" {% if disabled %}disabled{% endif %}>{{ form.outcome_adoption.value|default_if_none:"" }}</textarea>
 		    </div>
                 </td>
-                {% if project.stage > 1 %}<td contenteditable="true" class="results">
+                {% if project.stage > 1 %}<td contenteditable="true" class="results" tabindex="-1">
 		<div class="form-group"><textarea name="results_adoption" cols="40" rows="5" class="form-control" required id="id_results_adoption" {% if disabled %}disabled{% endif %}>{{ form.results_adoption.value|default_if_none:"" }}</textarea>
 		</div>
                 </td>{% endif %}
@@ -239,50 +237,48 @@
 
             <tr>
                 <td class="outcome">d) Implementation Fidelity/Adherence/Quality</td>
-                <td contenteditable="true" class="measure">
+                <td contenteditable="true" class="measure" tabindex="-1">
 		    <div class="form-group"><textarea name="outcome_quality" cols="40" rows="5" class="form-control" required id="id_outcome_quality" {% if disabled %}disabled{% endif %}>{{ form.outcome_quality.value|default_if_none:"" }}</textarea>
 		    </div>
                 </td>
-                {% if project.stage > 1 %}<td contenteditable="true" class="results">
+                {% if project.stage > 1 %}<td contenteditable="true" class="results" tabindex="-1">
 		<div class="form-group"><textarea name="results_quality" cols="40" rows="5" class="form-control" required id="id_results_quality" {% if disabled %}disabled{% endif %}>{{ form.results_quality.value|default_if_none:"" }}</textarea> 
 			</div>
                 </td>{% endif %}
             </tr>
             <tr>
                 <td class="outcome">e) Cost</td>
-                <td contenteditable="true" class="measure">
+                <td contenteditable="true" class="measure" tabindex="-1">
 		    <div class="form-group"><textarea name="outcome_cost" cols="40" rows="5" class="form-control" required id="id_outcome_cost" {% if disabled %}disabled{% endif %}>{{ form.outcome_cost.value|default_if_none:"" }}</textarea>
 		    </div>
                 </td>
-                {% if project.stage > 1 %}<td contenteditable="true" class="results">
+                {% if project.stage > 1 %}<td contenteditable="true" class="results" tabindex="-1">
 		<div class="form-group"><textarea name="results_cost" cols="40" rows="5" class="form-control" required id="id_results_cost" {% if disabled %}disabled{% endif %}>{{ form.results_cost.value|default_if_none:"" }}</textarea>
 		</div>
                 </td>{% endif %}
             </tr>
             {% if project.stage > 2 %}<tr>
                 <td class="outcome">f) Maintenance/Sustainment</td>
-                <td contenteditable="true" class="measure">
+                <td contenteditable="true" class="measure" tabindex="-1">
 		    <div class="form-group"><textarea name="outcome_maintenance" cols="40" rows="5" class="form-control" required id="id_outcome_maintenance" {% if disabled %}disabled{% endif %}>{{ form.outcome_maintenance.value|default_if_none:"" }}</textarea>
 		    </div>
                 </td>
-                <td contenteditable="true" class="results">
+                <td contenteditable="true" class="results" tabindex="-1">
 		<div class="form-group"><textarea name="results_maintenance" cols="40" rows="5" class="form-control" required id="id_results_maintenance" {% if disabled %}disabled{% endif %}>{{ form.results_maintenance.value|default_if_none:"" }}</textarea>
 		</div>
                 </td>
             </tr>{% endif %}
             <tr>
-                <td class="outcome">{% if project.stage < 3 %}f){% else %}g){% endif %} Any other measures?</td>
-                <td contenteditable="true" class="measure">
+                <td class="outcome">{% if project.stage < 3 %}f){% else %}g){% endif %} Any other measures (including readiness for implementation)?</td>
+                <td contenteditable="true" class="measure" tabindex="-1">
 		    <div class="form-group"><textarea name="outcome_other" cols="40" rows="5" class="form-control" id="id_outcome_other" {% if disabled %}disabled{% endif %}>{{ form.outcome_other.value|default_if_none:"" }}</textarea>
 		    </div>
                 </td>
-                {% if project.stage > 1 %}<td contenteditable="true" class="results">
+                {% if project.stage > 1 %}<td contenteditable="true" class="results" tabindex="-1">
 		<div class="form-group"><textarea name="results_other" cols="40" rows="5" class="form-control" id="id_results_other" {% if disabled %}disabled{% endif %}>{{ form.results_other.value|default_if_none:"" }}</textarea>
 		</div>
                 </td>{% endif %}
             </tr>
-
     </table>
     </div>
     </div>
-

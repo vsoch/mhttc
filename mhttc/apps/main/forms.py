@@ -63,10 +63,12 @@ class FormTemplateForm(forms.ModelForm):
             "start_date": DatePickerInput(),
             "end_date": DatePickerInput(),
         }
+
         fields = (
             "name",
             "start_date",
             "end_date",
+            "target_audience_who",
             "target_audience_disciplines",
             "target_audience_roles",
             "target_audience_across_orgs",
@@ -76,25 +78,25 @@ class FormTemplateForm(forms.ModelForm):
             "consider_system_factors",
             "consider_org_factors",
             "consider_clinical_factors",
-            #            "consider_sustainment_strategy",       # Only required for stage3
+            "consider_sustainment_strategy",  # Only required for stage3
             "outcome_reach",
             "outcome_effectiveness",
             "outcome_adoption",
             "outcome_quality",
             "outcome_cost",
-            #            "outcome_maintenance",                 # Only required for stage3
+            "outcome_maintenance",  # Only required for stage3
             "outcome_other",
             "implementation_recruited",
-            #            "implementation_participants",         # # enrolled, only after stage 1
-            #            "implementation_enrolled",             # Only required after stage 1
-            #            "implementation_completing_half",      # Only required for stage 3
-            #            "implementation_completing_majority",  # Only required for stage 3
-            #            "results_reach",                       # Only required after stage 1
-            #            "results_effectiveness",               # Only required after stage 1
-            #            "results_adoption",                    # Only required after stage 1
-            #            "results_quality",                     # Only required after stage 1
-            #            "results_cost",                        # Only required after stage 1
-            #            "result_maintenance",                  # Only required for stage 3
+            "implementation_participants",  # # enrolled, only after stage 1
+            "implementation_enrolled",  # Only required after stage 1
+            "implementation_completing_half",  # Only required for stage 3
+            "implementation_completing_majority",  # Only required for stage 3
+            "results_reach",  # Only required after stage 1
+            "results_effectiveness",  # Only required after stage 1
+            "results_adoption",  # Only required after stage 1
+            "results_quality",  # Only required after stage 1
+            "results_cost",  # Only required after stage 1
+            "results_maintenance",  # Only required for stage 3
             "results_other",
         )
 
@@ -103,6 +105,7 @@ class FormTemplateForm(forms.ModelForm):
 
         # Required attributes for stage 2 and 3
         if self.stage > 1:
+            print(cleaned_data)
             for field in [
                 "results_reach",
                 "results_effectiveness",
@@ -112,7 +115,7 @@ class FormTemplateForm(forms.ModelForm):
                 "implementation_enrolled",
                 "implementation_participants",
             ]:
-                if not cleaned_data.get(field):
+                if field not in cleaned_data or cleaned_data.get(field) == None:
                     raise forms.ValidationError(
                         f"{field} is required for this stage of the template."
                     )
@@ -122,11 +125,11 @@ class FormTemplateForm(forms.ModelForm):
             for field in [
                 "outcome_maintenance",
                 "consider_sustainment_strategy",
-                "result_maintenance",
+                "results_maintenance",
                 "implementation_completing_half",
                 "implementation_completing_majority",
             ]:
-                if not cleaned_data.get(field):
+                if field not in cleaned_data or cleaned_data.get(field) == None:
                     raise forms.ValidationError(
                         f"{field} is required for this stage of the template."
                     )
@@ -135,3 +138,20 @@ class FormTemplateForm(forms.ModelForm):
         super(FormTemplateForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control"
+
+        # make subset of fields not required
+        for field in [
+            "consider_sustainment_strategy",
+            "outcome_maintenance",
+            "implementation_participants",
+            "implementation_enrolled",
+            "implementation_completing_half",
+            "implementation_completing_majority",
+            "results_reach",
+            "results_effectiveness",
+            "results_adoption",
+            "results_quality",
+            "results_cost",
+            "results_maintenance",
+        ]:
+            self.fields[field].required = False

@@ -12,10 +12,9 @@
         <tr>
             <td><a href="{% url 'view_project_form' project.uuid %}">{{ project.name }}</a></td>
             <td style="white-space: break-spaces">{{ project.description | truncatechars:100 }}</td>{% if request.user.center == project.center %}
-            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage != 1 %}disabled{% endif %}>Form Stage 1</button></a></td>
-            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage != 2 %}disabled{% endif %}>Form Stage 2</button></a></td>
-            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage != 3 %}disabled{% endif %}>Form Stage 3</button></a></td>{% endif %}
+            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage != 1 %}disabled{% endif %}>Exploratory/Planning Phase</button></a></td>
+            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage != 2 %}disabled{% endif %}>Implementation Phase</button></a></td>
+            <td><a href="{% url 'edit_form_template' project.uuid project.stage %}"><button type="button" class="btn btn-warning" {% if project.stage != 3 %}disabled{% endif %}>Sustainment Phase</button></a></td>{% endif %}
         </tr>
     </tbody>
-</table>
-
+</table> 
