@@ -87,8 +87,20 @@ def invited_user(request, uuid):
         password = request.POST.get("password")
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        role = request.POST.get("role")
 
-        if not email or not password or not password1 or not password2 or not center:
+        if (
+            not email
+            or not password
+            or not password1
+            or not password2
+            or not center
+            or not first_name
+            or not last_name
+            or not role
+        ):
             messages.warning(request, "Please fill in all fields.")
         elif password1 != password2:
             messages.warning(request, "Passwords do not match.")
@@ -122,6 +134,9 @@ def invited_user(request, uuid):
             user.uuid = uuid4()
             user.active = True
             user.center = center
+            user.first_name = first_name
+            user.last_name = last_name
+            user.role = role
             user.save()
             auth_login(request, user)
             messages.info(request, f"You are now logged in as {user.username}")

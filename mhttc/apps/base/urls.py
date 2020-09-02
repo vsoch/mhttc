@@ -15,6 +15,7 @@ import mhttc.apps.base.views as views
 urlpatterns = [
     url(r"^$", views.index_view, name="index"),
     url(r"^about/?$", views.about_view, name="about"),
+    url(r"^shared-folder/?$", views.shared_folder_view, name="shared_folder"),
     url(r"^contact/?$", views.contact_view, name="contact"),
     url(r"^terms/?$", views.terms_view, name="terms"),
     url(r"^privacy-policy/?$", views.terms_view, name="privacy-policy"),

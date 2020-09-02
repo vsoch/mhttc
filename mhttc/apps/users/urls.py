@@ -9,7 +9,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from django.urls import path
-from django.conf.urls import url, include
+from django.conf.urls import url
 import mhttc.apps.users.views as views
 
 urlpatterns = [

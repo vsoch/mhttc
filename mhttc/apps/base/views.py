@@ -44,6 +44,11 @@ def about_view(request):
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
+def shared_folder_view(request):
+    return render(request, "main/shared_folder.html")
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def terms_view(request):
     return render(request, "terms/usage_agreement_fullwidth.html")
 

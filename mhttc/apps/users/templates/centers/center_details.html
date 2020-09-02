@@ -53,11 +53,17 @@
 	    <table class="table table-bordered" id="center-table" width="100%" cellspacing="0"><thead>
 	      <tr>
 	       <th>Login</th>
+	       <th>First Name</th>
+	       <th>Last Name</th>
+	       <th>Role</th>
 	      </tr>
 	    </thead>
 	      <tbody>
               {% for user in center.user_set.all %}<tr>
                  <td>{{ user.username }}</td>
+                 <td>{% if user.first_name %}{{ user.first_name }}{% endif %}</td>
+                 <td>{% if user.last_name %}{{ user.last_name }}{% endif %}</td>
+                 <td>{% if user.role %}{{ user.role }}{% endif %}</td>
               </tr>{% endfor %}
 	    </tbody>
 	   </table>{% endif %}

@@ -101,6 +101,16 @@ class User(AbstractUser):
     agree_terms = models.BooleanField(default=False)
     agree_terms_date = models.DateTimeField(blank=True, default=None, null=True)
 
+    # Participant metadata
+    first_name = models.CharField(null=True, blank=True, max_length=255)
+    last_name = models.CharField(null=True, blank=True, max_length=255)
+    role = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        help_text="Your position or role in your center",
+    )
+
     # Ensure that we can add staff / superuser and retain on logout
     objects = CustomUserManager()
 
