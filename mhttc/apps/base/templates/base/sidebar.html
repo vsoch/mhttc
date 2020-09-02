@@ -9,7 +9,7 @@
                 <a href="{% url 'user_center' %}">My Center</a></li>
             </ul>
           </div>{% endif %}
-          <!--Projects-->
+          <!--Projects
           {% if request.user.is_authenticated %}<div class="ct-toc-item active">
             <a class="ct-toc-link" href="{% url 'all_projects' %}">Implementation Projects</a>
             <ul class="nav ct-sidenav">
@@ -18,7 +18,7 @@
               <li class="{% if request.path == '/projects/new/'%}active{% endif %}">
                 <a href="{% url 'new_project' %}">New Project</a></li>
             </ul>
-          </div>{% endif %}
+          </div>{% endif %}-->
           <!--Training-->
           {% if request.user.has_full_access %}<div class="ct-toc-item active">
             <a class="ct-toc-link" href="">Training Certificates</a>
@@ -32,6 +32,8 @@
           <div class="ct-toc-item active">
             <a class="ct-toc-link" href="">MHTTC Info</a>
             <ul class="nav ct-sidenav">
+              <li class="{% if request.path == '/shared-folder/'%}active{% endif %}">
+                <a href="{% url 'shared_folder' %}">Shared Folder</a></li>
             </ul>
           </div>
           <div class="ct-toc-item active">
