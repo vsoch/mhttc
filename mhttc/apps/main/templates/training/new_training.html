@@ -7,16 +7,14 @@
 update the slide, including graphics, text and the signature(s). Then File -> Download -> PNG Image (current slide). You should then put the image in a web accessible location (e.g., a raw GitHub address) and then post it in the "image url" box below.</p>
     <br><a href="{% url 'center_training' %}"><< back</a>
     <hr>
-    <form method="POST" class="post-form">{% csrf_token %}
+    <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
         <p><label for="id_name">Title of Training:</label> <input type="text" name="name" maxlength="250" class="form-control" required id="id_name"></p>
         <p><label for="id_description">Description:</label> <input type="text" name="description" maxlength="500" class="form-control" id="id_description"></p>
         <p><label for="id_contact">Contact:</label> <select name="contact" class="form-control" required id="id_contact">
         <option value="" selected>---------</option>{% for user in request.user.center.user_set.all %}
         <option value="{{ user.id }}">{{ user.username }}</option>{% endfor %}
         </select></p>
-        <p>
-        <label for="id_image_url">Image url:</label> 
-        <input type="url" name="image_url" maxlength="500" class="form-control" id="id_image_url"> <span class="helptext">Leave this blank to use the default template.</span></p>
+        <p><label for="id_file">Image File (png saved from template):</label><input accept="image/x-png" type="file" name="file" class="form-control" required="" id="id_file"></p>
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 {% endblock %}

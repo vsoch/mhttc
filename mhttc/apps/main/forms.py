@@ -27,11 +27,20 @@ class ProjectForm(forms.ModelForm):
 
 
 class TrainingForm(forms.ModelForm):
+
+    # Upload file only temporarily
+    file = forms.FileField()
+
     class Meta:
         model = Training
 
         # Center is associated to the user creating the training
-        fields = ("name", "description", "contact", "image_url")
+        fields = (
+            "name",
+            "description",
+            "contact",
+            "file",
+        )
 
     def __init__(self, *args, **kwargs):
         super(TrainingForm, self).__init__(*args, **kwargs)

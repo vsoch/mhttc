@@ -25,6 +25,7 @@ class Training(models.Model):
     time_created = models.DateTimeField("date created", auto_now_add=True)
     time_updated = models.DateTimeField("date modified", auto_now=True)
     name = models.CharField(max_length=250, blank=False)
+    image_data = models.TextField(null=True, blank=True)
     image_url = models.URLField(
         max_length=500,
         blank=True,
@@ -55,13 +56,6 @@ class TrainingParticipant(models.Model):
     name = models.CharField(max_length=250, blank=False)
     email = models.CharField(max_length=100, blank=True, null=True)
     training = models.ForeignKey("main.Training", on_delete=models.PROTECT, blank=False)
-    certificate_sent = models.BooleanField(
-        default=False,
-        help_text="Has the participant been sent a link for the certificate?",
-    )
-    completed = models.BooleanField(
-        default=False, help_text="Has the participant completed the training?"
-    )
 
     def send_certificate(self, training):
         """Given a training, send a user a certificate
@@ -84,7 +78,6 @@ class TrainingParticipant(models.Model):
                 message=message,
                 subject="[MHTTC] Your training certificate is ready!",
             ):
-                self.certificate_sent = True
                 self.save()
 
     def get_absolute_url(self):

@@ -27,6 +27,7 @@ from mhttc.apps.main.forms import (
 )
 from mhttc.apps.main.utils import make_certificate_response
 import re
+import base64
 
 ## Projects
 
@@ -246,10 +247,15 @@ def new_training(request):
         return redirect("index")
 
     if request.method == "POST":
-        form = TrainingForm(request.POST)
+        form = TrainingForm(request.POST, request.FILES)
+
+        # Parse base64 string to save to database
+        encoded_string = base64.b64encode(request.FILES["file"].read()).decode("utf-8")
+
         if form.is_valid():
             training = form.save(commit=False)
             training.center = request.user.center
+            training.image_data = encoded_string
             training.save()
             return redirect("training_details", uuid=training.uuid)
     else:
@@ -344,6 +350,32 @@ def training_details(request, uuid):
         )
     except Training.DoesNotExist:
         raise Http404
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def update_training_image(request, uuid):
+    """update the image for a training.
+    """
+    if request.method == "POST":
+
+        try:
+            training = Training.objects.get(uuid=uuid)
+        except Training.DoesNotExist:
+            raise Http404
+
+        # Only allowed to edit for their center
+        if request.user.center != training.center:
+            messages.warning(request, "You are not allowed to perform this action.")
+            return redirect("center_training")
+
+        training.image_data = base64.b64encode(request.FILES["file"].read()).decode(
+            "utf-8"
+        )
+        training.save()
+
+    return redirect("training_details", uuid=training.uuid)
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
