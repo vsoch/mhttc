@@ -9,7 +9,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from django.contrib import admin
-from mhttc.apps.main.models import Project, FormTemplate
+from mhttc.apps.main.models import Project, FormTemplate, Training, TrainingParticipant
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -19,6 +19,23 @@ class ProjectAdmin(admin.ModelAdmin):
         "description",
         "form",
         "contact",
+    )
+
+
+class TrainingAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "description",
+        "center",
+        "contact",
+    )
+
+
+class TrainingParticipantAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "email",
+        "training",
     )
 
 
@@ -57,5 +74,7 @@ class FormTemplateAdmin(admin.ModelAdmin):
     )
 
 
+admin.site.register(Training, TrainingAdmin)
+admin.site.register(TrainingParticipant, TrainingParticipantAdmin)
 admin.site.register(FormTemplate, FormTemplateAdmin)
 admin.site.register(Project, ProjectAdmin)
