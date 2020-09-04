@@ -11,6 +11,8 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from mhttc.settings import DOMAIN_NAME
 from django.db import models
 from django.urls import reverse
+import base64
+import tempfile
 import uuid
 
 
@@ -38,6 +40,15 @@ class Training(models.Model):
     center = models.ForeignKey("users.Center", on_delete=models.PROTECT, blank=False)
     contact = models.ForeignKey("users.User", on_delete=models.PROTECT, blank=False)
 
+    def get_temporary_image(self):
+        """Given image data, write a temporary image to file to generate certificate.
+        """
+        _, image_path = tempfile.mkstemp(prefix="training-template", suffix=".png")
+        image_data = base64.b64decode(self.image_data)
+        with open(image_path, "wb") as fh:
+            fh.write(image_data)
+        return image_path
+
     def get_absolute_url(self):
         return reverse("training_details", args=[self.uuid])
 
@@ -60,25 +71,24 @@ class TrainingParticipant(models.Model):
     def send_certificate(self, training):
         """Given a training, send a user a certificate
         """
-        if not self.certificate_sent:
-            from mhttc.apps.users.utils import send_email
+        from mhttc.apps.users.utils import send_email
 
-            url = "%s%s" % (
-                DOMAIN_NAME,
-                reverse("download_certificate", args=[training.uuid]),
-            )
-            message = (
-                "Congratulations! You've completed the training '%s' at a Mental Health Technology Transfer Network Center!\n"
-                "You can visit %s to download your certificate.\n\n"
-                "If this message was in error, please respond to this email and let us know."
-                % (training.name, url)
-            )
-            if send_email(
-                email_to=self.email,
-                message=message,
-                subject="[MHTTC] Your training certificate is ready!",
-            ):
-                self.save()
+        url = "%s%s" % (
+            DOMAIN_NAME,
+            reverse("download_certificate", args=[training.uuid]),
+        )
+        message = (
+            "Congratulations! You've completed the training '%s' at a Mental Health Technology Transfer Network Center!\n"
+            "You can visit %s to download your certificate.\n\n"
+            "If this message was in error, please respond to this email and let us know."
+            % (training.name, url)
+        )
+        if send_email(
+            email_to=self.email,
+            message=message,
+            subject="[MHTTC] Your training certificate is ready!",
+        ):
+            self.save()
 
     def get_absolute_url(self):
         return reverse("participant_details", args=[self.uuid])

@@ -112,7 +112,6 @@ def edit_form_template(request, uuid, stage=1):
             )
 
         # Get standard form fields
-        print(request.POST)
         form = FormTemplateForm(request.POST)
         form.stage = project.stage
 
@@ -310,8 +309,17 @@ def training_details(request, uuid):
                 messages.warning(request, "You are not allowed to perform this action.")
                 return redirect("center_training")
 
+            # Can only send if there is an associated image data
+            if training.image_data in [None, ""]:
+                messages.info(
+                    request,
+                    "You must upload a certificate template before sending certificates.",
+                )
+                return redirect("training_details", uuid=training.uuid)
+
             # Add new participant emails
             emails = request.POST.get("emails", "")
+            count = 0
             for email in emails.split("\n"):
 
                 # Any weird newlines
@@ -333,15 +341,13 @@ def training_details(request, uuid):
                     training=training, email=email
                 )
                 participant.save()
+                participant.send_certificate(training=training)
+                count += 1
 
-            # Only registered when marking as completed
-            for key in request.POST:
-                if key.startswith("completed_"):
-                    uuid = key.replace("completed_", "", 1)
-                    participant = TrainingParticipant.objects.get(id=uuid)
-                    participant.completed = True
-                    participant.send_certificate(training=training)
-                    participant.save()
+            # Tell the user how many were sent
+            messages.info(
+                request, "You have requested %s certificate emails to be sent." % count
+            )
 
         return render(
             request,
@@ -422,9 +428,7 @@ def download_certificate(request, uuid):
             # Ensure that the participant is completed for the training
             email = form.cleaned_data["email"]
             try:
-                participant = TrainingParticipant.objects.get(
-                    email=email, training=training
-                )
+                TrainingParticipant.objects.get(email=email, training=training)
             except:
                 messages.warning(
                     request, "We cannot find a record of your participation."
@@ -435,17 +439,13 @@ def download_certificate(request, uuid):
                     {"form": form, "training": training},
                 )
 
-            # Training must be completed
-            if not participant.completed:
-                messages.warning(request, "You have not completed this training.")
-                return render(
-                    request,
-                    "training/download_certificate.html",
-                    {"form": form, "training": training},
-                )
-
+            # Create temporary image (cleaned up from /tmp when container rebuilt weekly)
+            image_path = training.get_temporary_image()
             return make_certificate_response(
-                form.cleaned_data["name"], training.center.name, training.name
+                form.cleaned_data["name"],
+                training.center.name,
+                training.name,
+                image_path,
             )
     else:
         form = CertificateForm()
