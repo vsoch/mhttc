@@ -16,6 +16,7 @@ class CenterAdmin(admin.ModelAdmin):
     fields = (
         "name",
         "owners",
+        "full_access",
     )
 
 

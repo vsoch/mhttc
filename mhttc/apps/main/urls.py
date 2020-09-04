@@ -33,6 +33,11 @@ urlpatterns = [
         views.download_certificate,
         name="download_certificate",
     ),
+    path(
+        "training/<uuid:uuid>/update/image",
+        views.update_training_image,
+        name="update_training_image",
+    ),
     path("training/<uuid:uuid>/edit", views.edit_training, name="edit_training"),
     path("training/<uuid:uuid>/", views.training_details, name="training_details"),
     path("center/training/", views.center_training, name="center_training"),
