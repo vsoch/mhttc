@@ -37,7 +37,7 @@
             <div class="tab-pane show" id="nav-certificate" role="tabpanel" aria-labelledby="nav-certificate-tab" style="padding-top:20px">
                {% if training.image_data %}<img src="data:image/png;base64, {{ training.image_data }}">{% endif %}
                
-               <form method="POST" class="post-form" enctype="multipart/form-data" action="{% url 'update_training_image' training.uuid %}">{% csrf_token %}
+               <form method="POST" class="post-form" enctype="multipart/form-data" action="{% url 'update_event_image' training.uuid %}">{% csrf_token %}
                  <p><label for="id_file">Update Image File (png saved from template):</label><input accept="image/x-png" type="file" name="file" class="form-control" required="" id="id_file"></p>
                  <button type="submit" class="save btn btn-default">Save</button>
                </form>
@@ -68,7 +68,7 @@
 	    </thead>
 	      <tbody>
               <tr>
-                 <td>Title of Training</td>
+                 <td>Title of Event</td>
                  <td>{{ training.name }}</td>
               </tr>
               <tr>
