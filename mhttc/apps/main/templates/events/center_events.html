@@ -2,13 +2,13 @@
 {% load static %}
 {% block content %}
 
-<h1>Training for {{ center.name }}</h1>
+<h1>Events for {{ center.name }}</h1>
 <hr>
 {% if events.count > 0 %}
 <table class="table table-bordered" id="center-trining" width="100%" cellspacing="0">
     <thead>
         <tr>
-            <th>Title of Training</th>
+            <th>Title of Event</th>
             <th>Description</th>
             <th>Contact</th>
             <th></th>
@@ -18,11 +18,11 @@
             <td>{{ training.name }}</td>
             <td>{{ training.description | truncatechars:100 }}</td>
             <td><a href="mailto:{{ training.contact.email }}">{{ training.contact.email }}</a></td>
-            <td><a href="{% url 'edit_training' training.uuid %}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
+            <td><a href="{% url 'edit_event' training.uuid %}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
                 <a href="{{ training.get_absolute_url }}"><button type="button" class="btn btn-primary btn-sm">View</button></a></td>
         </tr>{% endfor %}
     </tbody>
 </table>
 {% else %}
-<p class="alert alert-primary">The {{ request.user.center.name }} does not have any training events! <a style="float:right" href="{% url 'new_training' %}"><button class="btn btn-primary btn-sm" type="button">make a new training</button></a>.</p>{% endif %}
+<p class="alert alert-primary">The {{ request.user.center.name }} does not have any events! <a style="float:right" href="{% url 'new_event' %}"><button class="btn btn-primary btn-sm" type="button">make a new event</button></a>.</p>{% endif %}
 {% endblock %}

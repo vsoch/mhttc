@@ -476,6 +476,13 @@ the base containers are maintained for you. And a few final tips:
 
  - if you need to re-do the storage upload, you can delete the buckets entirely (both for staging and production) and they will be re-generated.
 
+
+#### Custom Domain
+
+If you want to add a custom domain, you can purchase it with [Google Domains]()
+and then [follow instructions](https://cloud.google.com/appengine/docs/standard/python3/mapping-custom-domains)
+to use it for App Engine.
+
 ## Cleaning Up
 
 You should navigate to App Engine --> Settings and then click on "Disable Application" to permanently disable it.

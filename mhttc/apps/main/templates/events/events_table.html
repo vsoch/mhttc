@@ -1,7 +1,7 @@
 <table class="table table-bordered" id="trainings_table" width="100%" cellspacing="0">
     <thead>
         <tr>
-            <th>Title of Training</th>
+            <th>Title of Event</th>
             <th>Description</th>
             <th></th>
             <th></th>
@@ -10,7 +10,7 @@
     </thead>
     <tbody>{% for training in trainings %}
         <tr>
-            <td><a href="{% url 'training_details' training.uuid %}">{{ training.name }}</a></td>
+            <td><a href="{% url 'event_details' training.uuid %}">{{ training.name }}</a></td>
             <td style="white-space: break-spaces">{{ training.description | truncatechars:100 }}</td>
             <td></td>
             <td></td>

@@ -26,19 +26,19 @@ urlpatterns = [
     path(
         "project/forms/<uuid:uuid>/", views.view_project_form, name="view_project_form"
     ),
-    # Training
-    path("training/new/", views.new_training, name="new_training"),
+    # Events
+    path("event/new/", views.new_event, name="new_event"),
     path(
-        "training/<uuid:uuid>/certificate/",
+        "event/<uuid:uuid>/certificate/",
         views.download_certificate,
         name="download_certificate",
     ),
     path(
-        "training/<uuid:uuid>/update/image",
-        views.update_training_image,
-        name="update_training_image",
+        "event/<uuid:uuid>/update/image",
+        views.update_event_image,
+        name="update_event_image",
     ),
-    path("training/<uuid:uuid>/edit", views.edit_training, name="edit_training"),
-    path("training/<uuid:uuid>/", views.training_details, name="training_details"),
-    path("center/training/", views.center_training, name="center_training"),
+    path("event/<uuid:uuid>/edit", views.edit_event, name="edit_event"),
+    path("event/<uuid:uuid>/", views.event_details, name="event_details"),
+    path("center/events/", views.center_events, name="center_events"),
 ]

@@ -34,7 +34,7 @@ def make_certificate_response(name, center, training_title, image_path=None):
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = (
-        'attachment; filename="MHTTC-training-%s-certificate.pdf"'
+        'attachment; filename="MHTTC-event-%s-certificate.pdf"'
         % center.replace(" ", "-").lower()
     )
 
@@ -50,6 +50,6 @@ def make_certificate_response(name, center, training_title, image_path=None):
 
     # More body Text ...
     c.setFont("Helvetica", 20, leading=None)
-    c.drawCentredString(480, 150, center + ": " + training_title)
+    c.drawCentredString(480, 150, training_title)
     c.save()
     return response

@@ -231,14 +231,14 @@ def view_project_form(request, uuid):
         raise Http404
 
 
-## Training
+## Events
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @login_required
 @user_agree_terms
-def new_training(request):
-    """Create a new training. A user that does not have full access to the site
+def new_event(request):
+    """Create a new event. A user that does not have full access to the site
        cannot see this view
     """
     if not request.user.has_full_access:
@@ -256,17 +256,17 @@ def new_training(request):
             training.center = request.user.center
             training.image_data = encoded_string
             training.save()
-            return redirect("training_details", uuid=training.uuid)
+            return redirect("event_details", uuid=training.uuid)
     else:
         form = TrainingForm()
-    return render(request, "training/new_training.html", {"form": form})
+    return render(request, "events/new_event.html", {"form": form})
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @login_required
 @user_agree_terms
-def center_training(request):
-    """Return a listing of training events being held by the center. A user
+def center_events(request):
+    """Return a listing of events being held by the center. A user
        that does not have full access to the site cannot see this view.
     """
     if not request.user.has_full_access:
@@ -279,7 +279,7 @@ def center_training(request):
     events = Training.objects.filter(center=request.user.center)
     return render(
         request,
-        "training/center_training.html",
+        "events/center_events.html",
         {"events": events, "center": request.user.center},
     )
 
@@ -287,8 +287,8 @@ def center_training(request):
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @login_required
 @user_agree_terms
-def training_details(request, uuid):
-    """Return the details of a training. A user that does not have full access
+def event_details(request, uuid):
+    """Return the details of an event. A user that does not have full access
        to the site cannot see this view.
     """
     if not request.user.has_full_access:
@@ -307,7 +307,7 @@ def training_details(request, uuid):
                 or not request.user.has_full_access
             ):
                 messages.warning(request, "You are not allowed to perform this action.")
-                return redirect("center_training")
+                return redirect("center_events")
 
             # Can only send if there is an associated image data
             if training.image_data in [None, ""]:
@@ -315,7 +315,7 @@ def training_details(request, uuid):
                     request,
                     "You must upload a certificate template before sending certificates.",
                 )
-                return redirect("training_details", uuid=training.uuid)
+                return redirect("event_details", uuid=training.uuid)
 
             # Add new participant emails
             emails = request.POST.get("emails", "")
@@ -351,7 +351,7 @@ def training_details(request, uuid):
 
         return render(
             request,
-            "training/training_details.html",
+            "events/event_details.html",
             context={"training": training, "edit_permission": edit_permission},
         )
     except Training.DoesNotExist:
@@ -361,8 +361,8 @@ def training_details(request, uuid):
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @login_required
 @user_agree_terms
-def update_training_image(request, uuid):
-    """update the image for a training.
+def update_event_image(request, uuid):
+    """update the image for an event.
     """
     if request.method == "POST":
 
@@ -374,21 +374,21 @@ def update_training_image(request, uuid):
         # Only allowed to edit for their center
         if request.user.center != training.center:
             messages.warning(request, "You are not allowed to perform this action.")
-            return redirect("center_training")
+            return redirect("center_events")
 
         training.image_data = base64.b64encode(request.FILES["file"].read()).decode(
             "utf-8"
         )
         training.save()
 
-    return redirect("training_details", uuid=training.uuid)
+    return redirect("event_details", uuid=training.uuid)
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @login_required
 @user_agree_terms
-def edit_training(request, uuid):
-    """edit training details
+def edit_event(request, uuid):
+    """edit event details
     """
     try:
         training = Training.objects.get(uuid=uuid)
@@ -398,7 +398,7 @@ def edit_training(request, uuid):
     # Only allowed to edit for their center
     if request.user.center != training.center:
         messages.warning(request, "You are not allowed to perform this action.")
-        return redirect("center_training")
+        return redirect("center_events")
 
     if request.method == "POST":
         form = TrainingForm(request.POST)
@@ -406,15 +406,15 @@ def edit_training(request, uuid):
             training = form.save(commit=False)
             training.center = request.user.center
             training.save()
-            return redirect("training_details", uuid=training.uuid)
+            return redirect("event_details", uuid=training.uuid)
     else:
         form = TrainingForm(initial=model_to_dict(training))
-    return render(request, "training/new_training.html", {"form": form})
+    return render(request, "events/new_event.html", {"form": form})
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def download_certificate(request, uuid):
-    """download a certificate for a training.
+    """download a certificate for an event.
     """
     try:
         training = Training.objects.get(uuid=uuid)
@@ -435,7 +435,7 @@ def download_certificate(request, uuid):
                 )
                 return render(
                     request,
-                    "training/download_certificate.html",
+                    "events/download_certificate.html",
                     {"form": form, "training": training},
                 )
 
@@ -451,6 +451,6 @@ def download_certificate(request, uuid):
         form = CertificateForm()
     return render(
         request,
-        "training/download_certificate.html",
+        "events/download_certificate.html",
         {"form": form, "training": training},
     )
