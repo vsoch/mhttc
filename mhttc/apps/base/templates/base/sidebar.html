@@ -19,14 +19,14 @@
                 <a href="{% url 'new_project' %}">New Project</a></li>
             </ul>
           </div>{% endif %}-->
-          <!--Training-->
+          <!--Events-->
           {% if request.user.has_full_access %}<div class="ct-toc-item active">
-            <a class="ct-toc-link" href="">Training Certificates</a>
+            <a class="ct-toc-link" href="">Event Certificates</a>
             <ul class="nav ct-sidenav">
               <li class="{% if request.path == '/u/center/'%}active{% endif %}">
-                <a href="{% url 'center_training' %}">Training</a></li>
-              <li class="{% if request.path == '/training/'%}active{% endif %}">
-                <a href="{% url 'new_training' %}">New Training</a></li>
+                <a href="{% url 'center_events' %}">Events</a></li>
+              <li class="{% if request.path == '/event/'%}active{% endif %}">
+                <a href="{% url 'new_event' %}">New Event</a></li>
             </ul>
           </div>{% endif %}
           <div class="ct-toc-item active">

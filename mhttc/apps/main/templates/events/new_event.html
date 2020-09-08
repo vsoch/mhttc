@@ -1,0 +1,20 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block content %}
+    <h2>{% if form.name.value %}Edit{% else %}New{% endif %} Event</h2>
+    <hr>
+    <p class="alert alert-info" style="max-width:100%">This event {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}. By default, the certificate will use <a target="_blank" href="https://docs.google.com/presentation/d/1V7YYtwcwfhSd1WJ9C0XGWOLwXjPU6zcdFxjeGYeXJJE/edit?usp=sharing">this template</a>. To customize this template for your event, open the template, update the logo(s) and the signature(s), and delete the orange box. Do not move or edit the information that is covered by the orange box. Then File -> Download -> PNG Image (current slide). Then save the image on your computer, and then upload it in the "Image File" box below.</p>
+
+    <br><a href="{% url 'center_events' %}"><< back</a>
+    <hr>
+    <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+        <p><label for="id_name">Title of Event:</label> <input type="text" name="name" maxlength="250" class="form-control" required id="id_name"></p>
+        <p><label for="id_description">Description:</label> <input type="text" name="description" maxlength="500" class="form-control" id="id_description"></p>
+        <p><label for="id_contact">Contact:</label> <select name="contact" class="form-control" required id="id_contact">
+        <option value="" selected>---------</option>{% for user in request.user.center.user_set.all %}
+        <option value="{{ user.id }}">{{ user.username }}</option>{% endfor %}
+        </select></p>
+        <p><label for="id_file">Image File (png saved from template):</label><input accept="image/x-png" type="file" name="file" class="form-control" required="" id="id_file"></p>
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}

@@ -50,7 +50,7 @@ class Training(models.Model):
         return image_path
 
     def get_absolute_url(self):
-        return reverse("training_details", args=[self.uuid])
+        return reverse("event_details", args=[self.uuid])
 
     def get_label(self):
         return "training"
@@ -77,16 +77,19 @@ class TrainingParticipant(models.Model):
             DOMAIN_NAME,
             reverse("download_certificate", args=[training.uuid]),
         )
+
         message = (
-            "Congratulations! You've completed the training '%s' at a Mental Health Technology Transfer Network Center!\n"
+            "Thank you for attending the event '%s' from the Mental Health Technology Transfer Center (MHTTC) Network!\n"
             "You can visit %s to download your certificate.\n\n"
-            "If this message was in error, please respond to this email and let us know."
+            "If this message was in error, please respond to this email and let us know.\n\n"
+            "Be sure to look for more of our events at www.mhttcnetwork.org and find "
+            " your MHTTC Regional or National Focus Area Center at https://mhttcnetwork.org/centers/selection"
             % (training.name, url)
         )
         if send_email(
             email_to=self.email,
             message=message,
-            subject="[MHTTC] Your training certificate is ready!",
+            subject="Your event certificate of completion is ready!",
         ):
             self.save()
 
