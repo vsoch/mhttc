@@ -26,7 +26,7 @@ class Training(models.Model):
     # Why do these fields use time, and others use date (e.g., see ip_check*)
     time_created = models.DateTimeField("date created", auto_now_add=True)
     time_updated = models.DateTimeField("date modified", auto_now=True)
-    name = models.CharField(max_length=250, blank=False)
+    name = models.CharField(max_length=250, blank=False, unique=True)
     image_data = models.TextField(null=True, blank=True)
     image_url = models.URLField(
         max_length=500,
@@ -50,6 +50,9 @@ class Training(models.Model):
     center = models.ForeignKey("users.Center", on_delete=models.PROTECT, blank=False)
     contact = models.ForeignKey("users.User", on_delete=models.PROTECT, blank=False)
 
+    def __str__(self):
+        return "<Training:%s>" % self.name
+
     def get_temporary_image(self):
         """Given image data, write a temporary image to file to generate certificate.
         """
@@ -67,6 +70,8 @@ class Training(models.Model):
 
     class Meta:
         app_label = "main"
+        unique_together = [["name", "center"]]
+
 
 
 class TrainingParticipant(models.Model):
@@ -76,7 +81,7 @@ class TrainingParticipant(models.Model):
 
     name = models.CharField(max_length=250, blank=False)
     email = models.CharField(max_length=100, blank=True, null=True)
-    training = models.ForeignKey("main.Training", on_delete=models.PROTECT, blank=False)
+    training = models.ForeignKey("main.Training", on_delete=models.CASCADE, blank=False)
 
     def send_certificate(self, training):
         """Given a training, send a user a certificate
