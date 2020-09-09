@@ -3,18 +3,16 @@
         <tr>
             <th>Title of Event</th>
             <th>Description</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Date of Event</th>
+            <th>Duration</th>
         </tr>
     </thead>
     <tbody>{% for training in trainings %}
         <tr>
             <td><a href="{% url 'event_details' training.uuid %}">{{ training.name }}</a></td>
             <td style="white-space: break-spaces">{{ training.description | truncatechars:100 }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{% if training.dates %}{{ training.dates }}{% endif %}</td>
+            <td>{% if training.duration %}{{ training.duration }} hours{% endif %}</td>
         </tr>{% endfor %}
     </tbody>
 </table>

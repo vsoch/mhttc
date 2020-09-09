@@ -442,10 +442,7 @@ def download_certificate(request, uuid):
             # Create temporary image (cleaned up from /tmp when container rebuilt weekly)
             image_path = training.get_temporary_image()
             return make_certificate_response(
-                form.cleaned_data["name"],
-                training.center.name,
-                training.name,
-                image_path,
+                form.cleaned_data["name"], training, image_path,
             )
     else:
         form = CertificateForm()

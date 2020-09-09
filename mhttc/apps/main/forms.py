@@ -40,6 +40,8 @@ class TrainingForm(forms.ModelForm):
             "description",
             "contact",
             "file",
+            "dates",
+            "duration",
         )
 
     def __init__(self, *args, **kwargs):

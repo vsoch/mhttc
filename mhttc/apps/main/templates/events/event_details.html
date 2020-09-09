@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="container">
-  {% include "messages/message.html" %}
   <div class="row">
     <div class="col-md-12" style="padding-bottom:20px">
       <h1>{{ training.name }}</h1>
@@ -75,6 +74,14 @@
                  <td>Center</td>
                  <td>{{ training.center.name }}</td>
               </tr>
+              {% if training.dates %}<tr>
+                 <td>Date of Event</td>
+                 <td>{{ training.dates }}</td>
+              </tr>{% endif %}
+              {% if training.duration %}<tr>
+                 <td>Duration of Event</td>
+                 <td>{{ training.duration }} hours</td>
+              </tr>{% endif %}
               <tr>
                  <td>Participants</td>
                  <td>{{ training.trainingparticipant_set.count }}</td>
