@@ -3,7 +3,7 @@
 {% block content %}
     <h2>{% if form.name.value %}Edit{% else %}New{% endif %} Event</h2>
     <hr>
-    <p class="alert alert-info" style="max-width:100%">This event {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}. By default, the certificate will use <a target="_blank" href="https://docs.google.com/presentation/d/1V7YYtwcwfhSd1WJ9C0XGWOLwXjPU6zcdFxjeGYeXJJE/edit?usp=sharing">this template</a>. To customize this template for your event, open the template, update the logo(s) and the signature(s), and delete the orange box. Do not move or edit the information that is covered by the orange box. Then File -> Download -> PNG Image (current slide). Then save the image on your computer, and then upload it in the "Image File" box below.</p>
+    <p class="alert alert-info" style="max-width:100%">This event {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}. By default, the certificate will use <a target="_blank" href="https://docs.google.com/presentation/d/1V7YYtwcwfhSd1WJ9C0XGWOLwXjPU6zcdFxjeGYeXJJE/edit?usp=sharing">this template</a>. To customize this template for your event, open the template, update the logo(s) and the signature(s), and delete the orange boxes. Do not move or edit the information that is covered by any orange box. The title of the event, date, and duration will automatically populate based on the information you enter in the form below.  Then File -> Download -> PNG Image (current slide). Then save the image on your computer, and then upload it in the "Image File" box below.</p>
 
     <br><a href="{% url 'center_events' %}"><< back</a>
     <hr>
