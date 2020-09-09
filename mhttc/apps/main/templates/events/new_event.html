@@ -3,21 +3,20 @@
 {% block content %}
     <h2>{% if form.name.value %}Edit{% else %}New{% endif %} Event</h2>
     <hr>
+    {% if form.errors %}{% for error in form.errors %}<p class="alert alert-danger">{{ error }}</p>{% endfor %}{% endif %}
     <p class="alert alert-info" style="max-width:100%">This event {% if form.name.value %}is{% else %}will be{% endif %} associated with your center, {{ request.user.center.name }}. By default, the certificate will use <a target="_blank" href="https://docs.google.com/presentation/d/1V7YYtwcwfhSd1WJ9C0XGWOLwXjPU6zcdFxjeGYeXJJE/edit?usp=sharing">this template</a>. To customize this template for your event, open the template, update the logo(s) and the signature(s), and delete the orange boxes. Do not move or edit the information that is covered by any orange box. The title of the event, date, and duration will automatically populate based on the information you enter in the form below.  Then File -> Download -> PNG Image (current slide). Then save the image on your computer, and then upload it in the "Image File" box below.</p>
-
     <br><a href="{% url 'center_events' %}"><< back</a>
     <hr>
     <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
-        <p><label for="id_name">Title of Event:</label> <input type="text" name="name" maxlength="250" class="form-control" required id="id_name"></p>
-        <p><label for="id_description">Description:</label> <input type="text" name="description" maxlength="500" class="form-control" id="id_description" required></p>
-        <p><label for="id_dates">Date of Event:</label><input type="text" name="dates" maxlength="250" class="form-control" id="id_dates" required><br><span class="helptext">The date(s) of your event (will be printed on the certificate, format appropriately)</span></p>
-        <p><label for="id_duration">Duration:</label><input type="text" name="duration" maxlength="100" class="form-control" id="id_duration" required><br><span class="helptext">The duration of your event (hours)</span></p>
-
+        <p><label for="id_name">Title of Event:</label> <input type="text" name="name" maxlength="250" class="form-control" required id="id_name" {% if form.name.value %}value="{{ form.name.value }}"{% endif %}></p>
+        <p><label for="id_description">Description:</label> <input type="text" name="description" maxlength="500" class="form-control" id="id_description" {% if form.description.value %}value="{{ form.description.value }}"{% endif %} required></p>
+        <p><label for="id_dates">Date of Event: The date(s) of your event will be printed on the certificate, format appropriately.</label><input type="text" name="dates" maxlength="250" class="form-control" id="id_dates" {% if form.dates.value %}value="{{ form.dates.value }}"{% endif %} required></p>
+        <p><label for="id_duration"> Duration:  The duration of your event, typically hours, and include the unit (e.g., 4 hours).</label><input type="text" name="duration" maxlength="100" class="form-control" id="id_duration" {% if form.duration.value %}value="{{ form.duration.value }}"{% endif %} required></p>
         <p><label for="id_contact">Contact:</label> <select name="contact" class="form-control" required id="id_contact">
-        <option value="" selected>---------</option>{% for user in request.user.center.user_set.all %}
-        <option value="{{ user.id }}">{{ user.username }}</option>{% endfor %}
+        <option value="" {% if form.contact.value %}{% else %}selected{% endif %}>---------</option>{% for user in request.user.center.user_set.all %}
+        <option value="{{ user.id }}" {% if form.contact.value == user.id %}selected{% endif %}>{{ user.username }}</option>{% endfor %}
         </select></p>
-        <p><label for="id_file">Image File (png saved from template):</label><input accept="image/x-png" type="file" name="file" class="form-control" required="" id="id_file"></p>
+        <p><label for="id_file">Image File (png saved from template):</label><input accept="image/x-png" type="file" name="file" class="form-control" {% if form.contact.value %}{% else %}required=""{% endif %} id="id_file"></p>
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 {% endblock %}

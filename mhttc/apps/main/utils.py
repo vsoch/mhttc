@@ -57,7 +57,7 @@ def make_certificate_response(name, training, image_path=None):
     if training.dates:
         c.drawCentredString(480, 30, "Date of Event: %s" % training.dates)
     if training.duration:
-        c.drawCentredString(480, 20, "Duration: %s hours" % training.duration)
+        c.drawCentredString(480, 20, "Duration: %s" % training.duration)
 
     c.save()
     return response

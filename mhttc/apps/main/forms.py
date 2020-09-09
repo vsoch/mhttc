@@ -48,6 +48,7 @@ class TrainingForm(forms.ModelForm):
         super(TrainingForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control"
+        self.fields["file"].required = False
 
 
 class CertificateForm(forms.ModelForm):
