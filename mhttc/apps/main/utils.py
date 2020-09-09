@@ -46,18 +46,18 @@ def make_certificate_response(name, training, image_path=None):
 
     # Participant Name Text
     c.setFont("Helvetica-Bold", 24, leading=None)
-    c.drawCentredString(480, 300, name)
+    c.drawCentredString(480, 245, name)
 
     # More body Text ...
     c.setFont("Helvetica", 20, leading=None)
-    c.drawCentredString(480, 200, training.name)
+    c.drawCentredString(480, 150, training.name)
 
     # If we have dates of event and duration, add to bottom left
     c.setFont("Helvetica", 12, leading=None)
     if training.dates:
-        c.drawCentredString(480, 30, "Date of Event: %s" % training.dates)
+        c.drawCentredString(480, 120, "Date of Event: %s" % training.dates)
     if training.duration:
-        c.drawCentredString(480, 20, "Duration: %s" % training.duration)
+        c.drawCentredString(480, 100, "Duration: %s" % training.duration)
 
     c.save()
     return response

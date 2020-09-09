@@ -73,7 +73,6 @@ class Training(models.Model):
         unique_together = [["name", "center"]]
 
 
-
 class TrainingParticipant(models.Model):
     """A training participant is an email address (and status?) to indicate
        the status for a participant.
