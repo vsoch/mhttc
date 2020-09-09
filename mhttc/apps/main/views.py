@@ -401,12 +401,25 @@ def edit_event(request, uuid):
         return redirect("center_events")
 
     if request.method == "POST":
-        form = TrainingForm(request.POST)
+
+        # Do we have updated image data?
+        encoded_string = training.image_data
+        if "file" in request.FILES:
+            encoded_string = base64.b64encode(request.FILES["file"].read()).decode(
+                "utf-8"
+            )
+
+        form = TrainingForm(request.POST, request.FILES)
         if form.is_valid():
             training = form.save(commit=False)
             training.center = request.user.center
+            training.image_data = encoded_string
             training.save()
             return redirect("event_details", uuid=training.uuid)
+
+        # Form errors
+        else:
+            return render(request, "events/new_event.html", {"form": form})
     else:
         form = TrainingForm(initial=model_to_dict(training))
     return render(request, "events/new_event.html", {"form": form})

@@ -40,7 +40,10 @@ class Training(models.Model):
     # blank text field for dates, since will be widely varying in format
     dates = models.CharField(max_length=250, blank=True, null=True)
     duration = models.CharField(
-        max_length=100, blank=True, null=True, help_text="duration in hours"
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="duration with units (typically hours)",
     )
 
     # A project must be owned by a center, and the contact must be a user
