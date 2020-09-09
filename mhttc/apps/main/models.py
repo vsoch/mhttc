@@ -36,6 +36,13 @@ class Training(models.Model):
     )
     description = models.CharField(max_length=500, blank=True, null=True)
 
+    # I suggested a start and end date time here, but Heather explicitly asked for a
+    # blank text field for dates, since will be widely varying in format
+    dates = models.CharField(max_length=250, blank=True, null=True)
+    duration = models.CharField(
+        max_length=100, blank=True, null=True, help_text="duration in hours"
+    )
+
     # A project must be owned by a center, and the contact must be a user
     center = models.ForeignKey("users.Center", on_delete=models.PROTECT, blank=False)
     contact = models.ForeignKey("users.User", on_delete=models.PROTECT, blank=False)

@@ -20,7 +20,7 @@ import requests
 from io import BytesIO
 
 
-def make_certificate_response(name, center, training_title, image_path=None):
+def make_certificate_response(name, training, image_path=None):
     """Make a certificate (PDF) to return to a user in the browser
     """
     image_path = (
@@ -35,7 +35,7 @@ def make_certificate_response(name, center, training_title, image_path=None):
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = (
         'attachment; filename="MHTTC-event-%s-certificate.pdf"'
-        % center.replace(" ", "-").lower()
+        % training.center.name.replace(" ", "-").lower()
     )
 
     c = canvas.Canvas(response, pagesize=landscape(letter))
@@ -46,10 +46,18 @@ def make_certificate_response(name, center, training_title, image_path=None):
 
     # Participant Name Text
     c.setFont("Helvetica-Bold", 24, leading=None)
-    c.drawCentredString(480, 245, name)
+    c.drawCentredString(480, 300, name)
 
     # More body Text ...
     c.setFont("Helvetica", 20, leading=None)
-    c.drawCentredString(480, 150, training_title)
+    c.drawCentredString(480, 200, training.name)
+
+    # If we have dates of event and duration, add to bottom left
+    c.setFont("Helvetica", 12, leading=None)
+    if training.dates:
+        c.drawCentredString(480, 30, "Date of Event: %s" % training.dates)
+    if training.duration:
+        c.drawCentredString(480, 20, "Duration: %s hours" % training.duration)
+
     c.save()
     return response
