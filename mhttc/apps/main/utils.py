@@ -21,8 +21,7 @@ from io import BytesIO
 
 
 def make_certificate_response(name, training, image_path=None):
-    """Make a certificate (PDF) to return to a user in the browser
-    """
+    """Make a certificate (PDF) to return to a user in the browser"""
     image_path = (
         image_path or "%s/static/templates/MHTTC-Certificate-Template.png" % DOMAIN_NAME
     )

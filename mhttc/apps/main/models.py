@@ -18,7 +18,7 @@ import uuid
 
 class Training(models.Model):
     """A training holds one or more participants and a certificate template to give
-       on completion
+    on completion
     """
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -54,8 +54,7 @@ class Training(models.Model):
         return "<Training:%s>" % self.name
 
     def get_temporary_image(self):
-        """Given image data, write a temporary image to file to generate certificate.
-        """
+        """Given image data, write a temporary image to file to generate certificate."""
         _, image_path = tempfile.mkstemp(prefix="training-template", suffix=".png")
         image_data = base64.b64decode(self.image_data)
         with open(image_path, "wb") as fh:
@@ -75,7 +74,7 @@ class Training(models.Model):
 
 class TrainingParticipant(models.Model):
     """A training participant is an email address (and status?) to indicate
-       the status for a participant.
+    the status for a participant.
     """
 
     name = models.CharField(max_length=250, blank=False)
@@ -83,8 +82,7 @@ class TrainingParticipant(models.Model):
     training = models.ForeignKey("main.Training", on_delete=models.CASCADE, blank=False)
 
     def send_certificate(self, training):
-        """Given a training, send a user a certificate
-        """
+        """Given a training, send a user a certificate"""
         from mhttc.apps.users.utils import send_email
 
         url = "%s%s" % (
@@ -119,8 +117,7 @@ class TrainingParticipant(models.Model):
 
 
 class Project(models.Model):
-    """A project is owned by a center, and includes one or more form templates.
-    """
+    """A project is owned by a center, and includes one or more form templates."""
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -151,8 +148,7 @@ class Project(models.Model):
 
 
 class Strategy(models.Model):
-    """An implementation strategy to add to a FormTemplate
-    """
+    """An implementation strategy to add to a FormTemplate"""
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     time_created = models.DateTimeField("date created", auto_now_add=True)
@@ -178,8 +174,8 @@ class Strategy(models.Model):
 
 class FormTemplate(models.Model):
     """A form template collects basic information about the project. We render
-       different information and make it editable for the user depending on their
-       role and the project stage.
+    different information and make it editable for the user depending on their
+    role and the project stage.
     """
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

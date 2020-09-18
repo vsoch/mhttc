@@ -42,8 +42,7 @@ import re
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 @user_agree_terms
 def center_details(request, uuid):
-    """Return a project, or 404.
-    """
+    """Return a project, or 404."""
     try:
         center = Center.objects.get(id=uuid)
         return render(
@@ -57,8 +56,7 @@ def center_details(request, uuid):
 @login_required
 @user_agree_terms
 def user_center(request):
-    """Return a user listing of projects
-    """
+    """Return a user listing of projects"""
     if request.user.center:
         return redirect("center_details", request.user.center.id)
     messages.warning(request, "You do not belong to a center.")
@@ -79,8 +77,7 @@ def all_centers(request, centers=None):
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def invited_user(request, uuid):
-    """The view for an invited user to set their password and enable account.
-    """
+    """The view for an invited user to set their password and enable account."""
     if request.method == "POST":
         email = request.POST.get("email")
         center = request.POST.get("center")
@@ -149,8 +146,7 @@ def invited_user(request, uuid):
 @login_required
 @user_agree_terms
 def invite_users(request):
-    """Create new users based on email, and invite them to their accounts.
-    """
+    """Create new users based on email, and invite them to their accounts."""
     if not request.user.is_superuser:
         messages.warning(request, "You are not allowed to perform this action")
         redirect("index")
@@ -215,8 +211,7 @@ def invite_users(request):
 @login_required
 @user_agree_terms
 def view_profile(request, username=None, form=None):
-    """view a user's profile
-    """
+    """view a user's profile"""
     message = "You must select a user or be logged in to view a profile."
     if not username:
         if not request.user:
@@ -278,7 +273,7 @@ def agree_terms(request):
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def login(request):
     """login is bootstrapped here to show the user a usage agreement first, in the
-       case that he or she has not agreed to the terms.
+    case that he or she has not agreed to the terms.
     """
     if request.method == "POST":
         form = AuthenticationForm(request=request, data=request.POST)
@@ -308,7 +303,7 @@ def login(request):
 @login_required
 def logout(request):
     """log the user out, first trying to remove the user_id in the request session
-       skip if it doesn't exist
+    skip if it doesn't exist
     """
     try:
         del request.session["user_id"]
