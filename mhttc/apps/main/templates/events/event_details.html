@@ -22,7 +22,7 @@
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane show active" id="nav-participants" role="tabpanel" aria-labelledby="nav-projects-tab" style="padding-top:20px">
 
-                {% if edit_permission %}
+                {% if edit_permission %}{% if training.image_data %}
                 <h2>Send Certificates</h2>
 		<form method="POST" class="post-form">
 		 {% csrf_token %}
@@ -30,8 +30,9 @@
 		  <textarea name="emails" cols="40" rows="10" class="form-control" required id="emails"></textarea> 
 		  <span class="helptext">Please copy paste emalis (one per line) for participants to add.</span></p>
 		  <button style="margin-top:30px" type="submit" class="save btn btn-default">Send</button>
-		</form>{% endif %}
-
+		</form>{% else %}
+                <p class="alert alert-secondary">You must upload a certificate template first via the Certificate tab</p>
+                 {% endif %}{% endif %}
             </div>
             <div class="tab-pane show" id="nav-certificate" role="tabpanel" aria-labelledby="nav-certificate-tab" style="padding-top:20px">
                {% if training.image_data %}<img src="data:image/png;base64, {{ training.image_data }}">{% endif %}
