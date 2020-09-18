@@ -23,9 +23,9 @@ import uuid
 def get_instance(uid, Model):
     """get a instance based on UID
 
-       Parameters
-       ==========
-       uid: the id of the instance
+    Parameters
+    ==========
+    uid: the id of the instance
     """
     keyargs = {"id": uid}
     try:
@@ -44,8 +44,7 @@ def get_user(uid):
 
 
 class CustomUserManager(BaseUserManager):
-    """Create and save a User with the given username, email and password.
-    """
+    """Create and save a User with the given username, email and password."""
 
     def _create_user(
         self, username, email, password, is_staff, is_superuser, **extra_fields
@@ -116,7 +115,7 @@ class User(AbstractUser):
 
     def has_full_access(self):
         """Determine if the user has full access to the interweb, meaning they
-           can see more than projects
+        can see more than projects
         """
         if not self.center:
             return False
@@ -131,7 +130,7 @@ class User(AbstractUser):
 
 class Center(models.Model):
     """A center is a group of users with shared affiliation. It can have
-       one or more owners to manage it.
+    one or more owners to manage it.
     """
 
     name = models.CharField(max_length=50, unique=True, default=None)
@@ -151,16 +150,15 @@ class Center(models.Model):
 
     @property
     def uuid(self):
-        """Derive a unique id from the center name
-        """
+        """Derive a unique id from the center name"""
         if self.name is not None:
             return self.name.lower().replace(" ", "-")
 
     def has_edit_permission(self, request):
-        """ determine if a user has edit permission for a team.
-            1. A superuser has edit permission, always
-            2. A global admin has edit permission, always
-            3. A user has edit permission if is one of the owners
+        """determine if a user has edit permission for a team.
+        1. A superuser has edit permission, always
+        2. A global admin has edit permission, always
+        3. A user has edit permission if is one of the owners
         """
         # Global edit permission for superuser and staff
         if request.user.is_superuser or request.user.is_staff:

@@ -41,15 +41,15 @@ def send_email(
     filename=None,
 ):
     """given an email, a message, and an attachment, and a SendGrid API key is defined in
-       settings, send an attachment to the user. We return a message to print to
-       the interface.
+    settings, send an attachment to the user. We return a message to print to
+    the interface.
 
-       Parameters
-       ==========
-       email_to: the email to send the message to
-       message: the html content for the body
-       subject: the email subject
-       attachment: the attachment file on the server
+    Parameters
+    ==========
+    email_to: the email to send the message to
+    message: the html content for the body
+    subject: the email subject
+    attachment: the attachment file on the server
     """
     if not SENDGRID_API_KEY or not SENDGRID_SENDER_EMAIL:
         if request is not None:
@@ -85,13 +85,13 @@ def send_email(
 
 def generate_attachment(filepath, filetype="application/pdf", filename=None):
     """given a filepath, generate an attachment object for SendGrid by reading
-       it in and encoding in base64.
- 
-       Parameters
-       ==========
-       filepath: the file path to attach on the server.
-       filetype: MIME content type (defaults to application/pdf)
-       filename: a filename for the attachment (defaults to basename provided)
+    it in and encoding in base64.
+
+    Parameters
+    ==========
+    filepath: the file path to attach on the server.
+    filetype: MIME content type (defaults to application/pdf)
+    filename: a filename for the attachment (defaults to basename provided)
     """
     if not os.path.exists(filepath):
         return
@@ -114,8 +114,7 @@ def generate_attachment(filepath, filetype="application/pdf", filename=None):
 
 
 def generate_random_password(length=10):
-    """Generate a random password with letters, numbers, and special characters
-    """
+    """Generate a random password with letters, numbers, and special characters"""
     password_characters = string.ascii_letters + string.digits
     password = "".join(random.choice(password_characters) for i in range(length))
     return password

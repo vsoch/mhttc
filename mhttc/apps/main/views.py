@@ -36,8 +36,7 @@ import base64
 @login_required
 @user_agree_terms
 def project_details(request, uuid):
-    """Return a project, or 404.
-    """
+    """Return a project, or 404."""
     try:
         project = Project.objects.get(uuid=uuid)
         return render(
@@ -51,8 +50,7 @@ def project_details(request, uuid):
 @login_required
 @user_agree_terms
 def user_projects(request):
-    """Return a user listing of projects
-    """
+    """Return a user listing of projects"""
     projects = None
     if request.user.center is not None:
         projects = Project.objects.filter(center=request.user.center)
@@ -63,8 +61,7 @@ def user_projects(request):
 @login_required
 @user_agree_terms
 def all_projects(request, projects=None):
-    """Return a project, or 404.
-    """
+    """Return a project, or 404."""
     if projects is None:
         projects = Project.objects.all()
     return render(request, "projects/all_projects.html", context={"projects": projects})
@@ -93,8 +90,7 @@ def new_project(request):
 @login_required
 @user_agree_terms
 def edit_form_template(request, uuid, stage=1):
-    """edit a form template, meaning entering information for different stages
-    """
+    """edit a form template, meaning entering information for different stages"""
     try:
         project = Project.objects.get(uuid=uuid)
     except Project.DoesNotExist:
@@ -190,7 +186,11 @@ def edit_form_template(request, uuid, stage=1):
     return render(
         request,
         "projects/edit_form_template.html",
-        {"form": form, "project": project, "strategies": strategies,},
+        {
+            "form": form,
+            "project": project,
+            "strategies": strategies,
+        },
     )
 
 
@@ -208,7 +208,8 @@ def view_project_form(request, uuid):
         # If the form already belongs to another center
         if project.center != None and project.center != request.user.center:
             messages.warning(
-                request, "You are not allowed to edit a form not owned by your center.",
+                request,
+                "You are not allowed to edit a form not owned by your center.",
             )
             return redirect("index")
 
@@ -239,7 +240,7 @@ def view_project_form(request, uuid):
 @user_agree_terms
 def new_event(request):
     """Create a new event. A user that does not have full access to the site
-       cannot see this view
+    cannot see this view
     """
     if not request.user.has_full_access:
         messages.warning(request, "You are not allowed to perform this action.")
@@ -267,7 +268,7 @@ def new_event(request):
 @user_agree_terms
 def center_events(request):
     """Return a listing of events being held by the center. A user
-       that does not have full access to the site cannot see this view.
+    that does not have full access to the site cannot see this view.
     """
     if not request.user.has_full_access:
         messages.warning(request, "You are not allowed to perform this action.")
@@ -289,7 +290,7 @@ def center_events(request):
 @user_agree_terms
 def event_details(request, uuid):
     """Return the details of an event. A user that does not have full access
-       to the site cannot see this view.
+    to the site cannot see this view.
     """
     if not request.user.has_full_access:
         messages.warning(request, "You are not allowed to perform this action.")
@@ -362,8 +363,7 @@ def event_details(request, uuid):
 @login_required
 @user_agree_terms
 def update_event_image(request, uuid):
-    """update the image for an event.
-    """
+    """update the image for an event."""
     if request.method == "POST":
 
         try:
@@ -388,8 +388,7 @@ def update_event_image(request, uuid):
 @login_required
 @user_agree_terms
 def edit_event(request, uuid):
-    """edit event details
-    """
+    """edit event details"""
     try:
         training = Training.objects.get(uuid=uuid)
     except Training.DoesNotExist:
@@ -409,7 +408,7 @@ def edit_event(request, uuid):
                 "utf-8"
             )
 
-        form = TrainingForm(request.POST, request.FILES)
+        form = TrainingForm(request.POST, request.FILES, instance=training)
         if form.is_valid():
             training = form.save(commit=False)
             training.center = request.user.center
@@ -427,8 +426,7 @@ def edit_event(request, uuid):
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def download_certificate(request, uuid):
-    """download a certificate for an event.
-    """
+    """download a certificate for an event."""
     try:
         training = Training.objects.get(uuid=uuid)
     except Training.DoesNotExist:
@@ -455,7 +453,9 @@ def download_certificate(request, uuid):
             # Create temporary image (cleaned up from /tmp when container rebuilt weekly)
             image_path = training.get_temporary_image()
             return make_certificate_response(
-                form.cleaned_data["name"], training, image_path,
+                form.cleaned_data["name"],
+                training,
+                image_path,
             )
     else:
         form = CertificateForm()

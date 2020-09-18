@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     """add staff will add admin and manager privileges to a user.
-       The super user is an admin that can access the administrative
-       interface, and pretty much do anything.
+    The super user is an admin that can access the administrative
+    interface, and pretty much do anything.
     """
 
     def add_arguments(self, parser):
