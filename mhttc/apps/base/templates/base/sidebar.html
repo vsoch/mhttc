@@ -1,4 +1,4 @@
-      <div class="col-12 col-md-3 col-xl-2 ct-sidebar">
+{% if request.user.is_authenticated %}<div class="col-12 col-md-3 col-xl-2 ct-sidebar">
         <nav class="collapse ct-links" id="ct-docs-nav">
           <!--Center-->
           {% if request.user.is_authenticated and request.user.center %}
@@ -46,5 +46,6 @@
             </ul>
           </div>
         </nav>
-      </div>
-
+      </div>{% else %}
+<div class="col-12 col-md-3 col-xl-2"></div>
+{% endif %}
