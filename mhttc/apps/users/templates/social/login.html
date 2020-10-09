@@ -4,7 +4,6 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 
-    {% include 'messages/message.html' %}
     {% if request.user.is_anonymous %}
         <div class="ct-page-title">
           <h1 class="ct-title" id="content">
