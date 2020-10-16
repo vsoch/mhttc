@@ -7,16 +7,14 @@
 <table width="800px" class="table-bordered" id="center-training" width="90%" cellspacing="0">
     <thead>
         <tr>
-            <th width="25%">Title of Event</th>
-            <th width="25%">Description</th>
-            <th width="25%">Contact</th>
-            <th width="25%"></th>
+            <th width="33%">Title of Event</th>
+            <th width="33%">Description</th>
+            <th width="33%"></th>
         </tr>
     </thead>
     <tbody>{% for training in events %}<tr>
             <td>{{ training.name }}</td>
             <td>{{ training.description | truncatechars:100 }}</td>
-            <td><a href="mailto:{{ training.contact.email }}">{{ training.contact.email }}</a></td>
             <td><a href="{% url 'edit_event' training.uuid %}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
                 <a href="{{ training.get_absolute_url }}"><button type="button" class="btn btn-primary btn-sm">View</button></a></td>
         </tr>{% endfor %}
