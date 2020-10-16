@@ -48,7 +48,9 @@ class Training(models.Model):
 
     # A project must be owned by a center, and the contact must be a user
     center = models.ForeignKey("users.Center", on_delete=models.PROTECT, blank=False)
-    contact = models.ForeignKey("users.User", on_delete=models.PROTECT, blank=False)
+    contact = models.ForeignKey(
+        "users.User", on_delete=models.PROTECT, blank=True, null=True
+    )
 
     def __str__(self):
         return "<Training:%s>" % self.name

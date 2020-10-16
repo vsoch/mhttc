@@ -12,10 +12,10 @@
         <p><label for="id_description">Description:</label> <input type="text" name="description" maxlength="500" class="form-control" id="id_description" {% if form.description.value %}value="{{ form.description.value }}"{% endif %} required></p>
         <p><label for="id_dates">Date of Event: The date(s) of your event will be printed on the certificate, format appropriately.</label><input type="text" name="dates" maxlength="250" class="form-control" id="id_dates" {% if form.dates.value %}value="{{ form.dates.value }}"{% endif %} required></p>
         <p><label for="id_duration"> Duration:  The duration of your event, typically hours, and include the unit (e.g., 4 hours).</label><input type="text" name="duration" maxlength="100" class="form-control" id="id_duration" {% if form.duration.value %}value="{{ form.duration.value }}"{% endif %} required></p>
-        <p><label for="id_contact">Contact:</label> <select name="contact" class="form-control" required id="id_contact">
+        <!--<p><label for="id_contact">Contact:</label> <select name="contact" class="form-control" required id="id_contact">
         <option value="" {% if form.contact.value %}{% else %}selected{% endif %}>---------</option>{% for user in request.user.center.user_set.all %}
         <option value="{{ user.id }}" {% if form.contact.value == user.id %}selected{% endif %}>{{ user.username }}</option>{% endfor %}
-        </select></p>
+        </select></p>-->
         <p><label for="id_file">Image File (png saved from template):</label><input accept="image/x-png" type="file" name="file" class="form-control" {% if form.contact.value %}{% else %}required=""{% endif %} id="id_file"></p>
         <button type="submit" class="save btn btn-default">Save</button>
     </form>

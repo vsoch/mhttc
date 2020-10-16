@@ -38,7 +38,6 @@ class TrainingForm(forms.ModelForm):
         fields = (
             "name",
             "description",
-            "contact",
             "file",
             "dates",
             "duration",
