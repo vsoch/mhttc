@@ -39,11 +39,6 @@ def index_view(request):
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
-def about_view(request):
-    return render(request, "main/about.html")
-
-
-@ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def shared_folder_view(request):
     return render(request, "main/shared_folder.html")
 

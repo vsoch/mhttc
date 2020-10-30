@@ -8,7 +8,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-from mhttc.settings import DOMAIN_NAME
+from mhttc.settings import DOMAIN_NAME, SENDGRID_SENDER_EMAIL
 from django.db import models
 from django.urls import reverse
 import base64
@@ -51,6 +51,13 @@ class Training(models.Model):
     contact = models.ForeignKey(
         "users.User", on_delete=models.PROTECT, blank=True, null=True
     )
+
+    @property
+    def slug(self):
+        return self.name.replace(" ", "-").lower()
+
+    def deslugify(self, name):
+        return name.replace("-", " ")
 
     def __str__(self):
         return "<Training:%s>" % self.name
@@ -102,6 +109,7 @@ class TrainingParticipant(models.Model):
         )
         if send_email(
             email_to=self.email,
+            email_from=self.training.center.email or SENDGRID_SENDER_EMAIL,
             message=message,
             subject="Your event certificate of completion is ready!",
         ):

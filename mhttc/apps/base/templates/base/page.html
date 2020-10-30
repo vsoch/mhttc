@@ -9,7 +9,7 @@
       {% include "base/sidebar.html" %}
       <!-- Table of Contents -->
       <div class="d-none d-xl-block col-xl-2 ct-toc">
-        {% include "social/login-form.html" %}
+        {% if hide_login %}{% else %}{% include "social/login-form.html" %}{% endif %}
       </div>
       <main class="col-12 col-md-8 col-xl-7 py-md-3 pl-md-5 ct-content" role="main">
         <div class="container">{% include "messages/message.html" %}</div>

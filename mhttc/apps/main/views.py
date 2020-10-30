@@ -425,6 +425,27 @@ def edit_event(request, uuid):
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@login_required
+@user_agree_terms
+def delete_event(request, uuid):
+    """delete a training event"""
+    try:
+        training = Training.objects.get(uuid=uuid)
+    except Training.DoesNotExist:
+        raise Http404
+
+    # Only allowed to edit for their center
+    if request.user.center != training.center:
+        messages.warning(request, "You are not allowed to perform this action.")
+        return redirect("center_events")
+
+    # Delete the training
+    training.delete()
+    messages.info(request, "Event %s has been deleted." % training.name)
+    return redirect("center_events")
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def download_certificate(request, uuid):
     """download a certificate for an event."""
     try:

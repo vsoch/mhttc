@@ -78,6 +78,7 @@ def all_centers(request, centers=None):
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def invited_user(request, uuid):
     """The view for an invited user to set their password and enable account."""
+    context = {"hide_login": True}
     if request.method == "POST":
         email = request.POST.get("email")
         center = request.POST.get("center")
@@ -106,25 +107,25 @@ def invited_user(request, uuid):
                 user = User.objects.get(username=email, email=email)
             except User.DoesNotExist:
                 messages.warning(request, "%s does not exist." % email)
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Get the center
             try:
                 center = Center.objects.get(id=center)
             except Center.DoesNotExist:
                 messages.warning(request, "This center does not exist.")
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Verify the unique id
             if uuid != user.uuid:
                 messages.warning(request, "This link is no longer valid.")
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Now authenticate with previous password
             user = authenticate(username=email, password=password)
             if user is None:
                 messages.warning(request, "Invalid user email or password.")
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Update user password, and activate
             user.set_password(password1)
@@ -139,7 +140,11 @@ def invited_user(request, uuid):
             messages.info(request, f"You are now logged in as {user.username}")
             return redirect("/")
 
-    return render(request, "users/invited_user.html", {"centers": Center.objects.all()})
+    return render(
+        request,
+        "users/invited_user.html",
+        {"centers": Center.objects.all(), "hide_login": True},
+    )
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
