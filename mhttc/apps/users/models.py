@@ -134,6 +134,7 @@ class Center(models.Model):
     """
 
     name = models.CharField(max_length=50, unique=True, default=None)
+    email = models.EmailField(max_length=254, blank=True, null=True)
     owners = models.ManyToManyField(
         User,
         blank=True,

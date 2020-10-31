@@ -43,8 +43,6 @@
           <div class="ct-toc-item active">
             <a class="ct-toc-link" href="">Support</a>
             <ul class="nav ct-sidenav">
-              <li class="{% if request.path == '/about/'%}active{% endif %}">
-                <a href="{% url 'about' %}">About</a></li>
               <li class="{% if request.path == '/contact/'%}active{% endif %}">
                 <a href="{% url 'contact' %}">Contact</a></li>
             </ul>

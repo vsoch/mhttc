@@ -2,7 +2,6 @@
 db.sqlite3
 env
 /static
-migrations
 __pycache__
 Gemfile.lock
 app.yaml

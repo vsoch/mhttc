@@ -78,6 +78,7 @@ def all_centers(request, centers=None):
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def invited_user(request, uuid):
     """The view for an invited user to set their password and enable account."""
+    context = {"hide_login": True}
     if request.method == "POST":
         email = request.POST.get("email")
         center = request.POST.get("center")
@@ -106,25 +107,25 @@ def invited_user(request, uuid):
                 user = User.objects.get(username=email, email=email)
             except User.DoesNotExist:
                 messages.warning(request, "%s does not exist." % email)
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Get the center
             try:
                 center = Center.objects.get(id=center)
             except Center.DoesNotExist:
                 messages.warning(request, "This center does not exist.")
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Verify the unique id
             if uuid != user.uuid:
                 messages.warning(request, "This link is no longer valid.")
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Now authenticate with previous password
             user = authenticate(username=email, password=password)
             if user is None:
                 messages.warning(request, "Invalid user email or password.")
-                return render(request, "users/invited_user.html")
+                return render(request, "users/invited_user.html", context)
 
             # Update user password, and activate
             user.set_password(password1)
@@ -139,7 +140,11 @@ def invited_user(request, uuid):
             messages.info(request, f"You are now logged in as {user.username}")
             return redirect("/")
 
-    return render(request, "users/invited_user.html", {"centers": Center.objects.all()})
+    return render(
+        request,
+        "users/invited_user.html",
+        {"centers": Center.objects.all(), "hide_login": True},
+    )
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
@@ -184,8 +189,8 @@ def invite_users(request):
                 user.save()
                 url = "%s%s" % (DOMAIN_NAME, reverse("invited_user", args=[user.uuid]))
                 message = (
-                    "You've been invited to join the Mental Health Technology Transfer Network!\n"
-                    "You can login with the following username and password at %s :\n\nUsername: %s\nPassword: %s\n\n"
+                    "You've been invited to join the Mental Health Technology Transfer Network!<br>"
+                    "You can <a href='%s'>login</a> with the following username and password:<br><br>Username: %s<br>Password: %s<br><br>"
                     "If this message was in error, please respond to this email and let us know."
                     % (url, user.username, password)
                 )
