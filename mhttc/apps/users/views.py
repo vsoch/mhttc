@@ -189,8 +189,8 @@ def invite_users(request):
                 user.save()
                 url = "%s%s" % (DOMAIN_NAME, reverse("invited_user", args=[user.uuid]))
                 message = (
-                    "You've been invited to join the Mental Health Technology Transfer Network!\n"
-                    "You can login with the following username and password at %s :\n\nUsername: %s\nPassword: %s\n\n"
+                    "You've been invited to join the Mental Health Technology Transfer Network!<br>"
+                    "You can <a href='%s'>login</a> with the following username and password:<br><br>Username: %s<br>Password: %s<br><br>"
                     "If this message was in error, please respond to this email and let us know."
                     % (url, user.username, password)
                 )

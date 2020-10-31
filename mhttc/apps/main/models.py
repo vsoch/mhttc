@@ -99,10 +99,11 @@ class TrainingParticipant(models.Model):
             reverse("download_certificate", args=[training.uuid]),
         )
 
+        # This is in html
         message = (
-            "Thank you for attending the event '%s' from the Mental Health Technology Transfer Center (MHTTC) Network!\n"
-            "You can visit %s to download your certificate.\n\n"
-            "If this message was in error, please respond to this email and let us know.\n\n"
+            "Thank you for attending the event '%s' from the Mental Health Technology Transfer Center (MHTTC) Network!<br>"
+            "You can visit <a href='%s'>the certificate download page</a> to get your certificate.<br><br>"
+            "If this message was in error, please respond to this email and let us know.<br><br>"
             "Be sure to look for more of our events at www.mhttcnetwork.org and find "
             " your MHTTC Regional or National Focus Area Center at https://mhttcnetwork.org/centers/selection"
             % (training.name, url)

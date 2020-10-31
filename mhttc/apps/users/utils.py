@@ -68,7 +68,7 @@ def send_email(
         message=message,
         attachment=attachment,
         filetype=filetype,
-        fliename=filename,
+        filename=filename,
     )
 
     try:
@@ -86,7 +86,7 @@ def send_email(
             message=message,
             attachment=attachment,
             filetype=filetype,
-            fliename=filename,
+            filename=filename,
         )
         print(e)
         return False
@@ -113,7 +113,7 @@ def request_sender(center, email):
         "reply_to": {"email": center.email, "name": center.name},
         "country": "United States",
     }
-    # TODO this response is forbidden, need to look into it
+    # TODO: this endpoint looks like it's for a different service?
     return sg.client.senders.post(request_body=data)
 
 
@@ -123,7 +123,7 @@ def create_mail(email_to, email_from, subject, message, attachment, filetype, fi
         Email(email_from),
         To(email_to),
         subject,
-        Content("text/plain", message),
+        Content("text/html", message),
     )
 
     # If the user has provided an attachment, add it
