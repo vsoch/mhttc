@@ -130,8 +130,7 @@ pymysql.version_info = (1, 4, 6, "final", 0)  # change mysqlclient version
 pymysql.install_as_MySQLdb()
 
 if os.getenv("MYSQL_HOST") is not None:
-    # Running on production App Engine, so connect to Google Cloud SQL using
-    # the unix socket at /cloudsql/<your-cloudsql-connection string>
+    # Running on production App Engine, connect to production database
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -142,6 +141,10 @@ if os.getenv("MYSQL_HOST") is not None:
             "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
         }
     }
+
+    # If we are on app engine, ensure https only
+    if os.getenv("RUNNING_APP_ENGINE") == "yes":
+        SECURE_SSL_REDIRECT = True
 else:
     # Use sqlite when testing locally
     DATABASES = {
