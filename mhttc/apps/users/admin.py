@@ -15,6 +15,7 @@ from mhttc.apps.users.models import User, Center
 class CenterAdmin(admin.ModelAdmin):
     fields = (
         "name",
+        "email",
         "owners",
         "full_access",
     )
