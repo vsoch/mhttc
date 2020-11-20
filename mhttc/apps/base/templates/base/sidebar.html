@@ -32,10 +32,8 @@
           <div class="ct-toc-item active">
             <a class="ct-toc-link" href="">MHTTC Info</a>
             <ul class="nav ct-sidenav">
-              <li class="{% if request.path == '/shared-folder/'%}active{% endif %}">
-                <a href="{% url 'shared_folder' %}">Shared Folder</a></li>
               <li class="{% if request.path == '/quick-links/'%}active{% endif %}">
-                <a href="{% url 'quick_links' %}">Quick Links</a></li>
+                <a href="{% url 'quick_links' %}">Shared Folder and Quick Links</a></li>
               <li class="{% if request.path == '/groups/'%}active{% endif %}">
                 <a href="{% url 'groups' %}">MHTTC and TTC Groups</a></li>
             </ul>
