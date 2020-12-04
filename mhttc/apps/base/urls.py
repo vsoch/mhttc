@@ -15,6 +15,7 @@ import mhttc.apps.base.views as views
 urlpatterns = [
     url(r"^$", views.index_view, name="index"),
     url(r"^quick-links/?$", views.quick_links_view, name="quick_links"),
+    url(r"^zoom-request/?$", views.zoom_request_view, name="zoom_request"),
     url(r"^groups/?$", views.groups_view, name="groups"),
     url(r"^contact/?$", views.contact_view, name="contact"),
     url(r"^terms/?$", views.terms_view, name="terms"),

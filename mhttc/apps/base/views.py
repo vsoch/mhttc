@@ -49,6 +49,11 @@ def groups_view(request):
 
 
 @ratelimit(key="ip", rate=rl_rate, block=rl_block)
+def zoom_request_view(request):
+    return render(request, "main/zoom_request.html")
+
+
+@ratelimit(key="ip", rate=rl_rate, block=rl_block)
 def terms_view(request):
     return render(request, "terms/usage_agreement_fullwidth.html")
 
