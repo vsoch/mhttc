@@ -9,7 +9,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from django.urls import path
-from django.conf.urls import url
+from django.conf.urls import url, include
 import mhttc.apps.users.views as views
 
 urlpatterns = [
@@ -21,6 +21,7 @@ urlpatterns = [
     url(r"^terms/agree", views.agree_terms, name="agree_terms"),
     url(r"^u/delete$", views.delete_account, name="delete_account"),  # delete account
     url(r"^u/profile", views.view_profile, name="profile"),
+    url("^", include("django.contrib.auth.urls")),
     # Centers
     path("center/<int:uuid>/", views.center_details, name="center_details"),
     path("centers/", views.all_centers, name="all_centers"),

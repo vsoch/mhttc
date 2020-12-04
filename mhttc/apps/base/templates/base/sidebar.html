@@ -36,6 +36,8 @@
                 <a href="{% url 'quick_links' %}">Shared Folder and Quick Links</a></li>
               <li class="{% if request.path == '/groups/'%}active{% endif %}">
                 <a href="{% url 'groups' %}">MHTTC and TTC Groups</a></li>
+              <li class="{% if request.path == '/zoom-request/'%}active{% endif %}">
+                <a href="{% url 'zoom_request' %}">NCO Zoom Room Request Form</a></li>
             </ul>
           </div>
           <div class="ct-toc-item active">
