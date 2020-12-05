@@ -24,6 +24,15 @@ HELP_CONTACT_EMAIL = os.environ.get("HELP_CONTACT_EMAIL")
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDGRID_SENDER_EMAIL = os.environ.get("SENDGRID_SENDER_EMAIL", HELP_CONTACT_EMAIL)
 
+# Sending password reset emails
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587  # 25 or 587 (for unencrypted/TLS connections).
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = SENDGRID_SENDER_EMAIL
+
 # You likely will need to set the domain name after it's been allocated
 DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "http://127.0.0.1:8000")
 
