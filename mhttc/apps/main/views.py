@@ -482,11 +482,6 @@ def download_certificate(request, uuid):
             )
         else:
             messages.warning(request, "Your form submission is not valid.")
-            return render(
-                request,
-                "events/download_certificate.html",
-                {"form": form, "training": training},
-            )
 
     return render(
         request,
