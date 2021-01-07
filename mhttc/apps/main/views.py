@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404, JsonResponse
 from ratelimit.decorators import ratelimit
 
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.forms.models import model_to_dict
@@ -445,7 +446,7 @@ def delete_event(request, uuid):
     return redirect("center_events")
 
 
-@ratelimit(key="ip", rate=rl_rate, block=rl_block)
+@csrf_exempt
 def download_certificate(request, uuid):
     """download a certificate for an event."""
     try:
@@ -453,6 +454,7 @@ def download_certificate(request, uuid):
     except Training.DoesNotExist:
         raise Http404
 
+    form = CertificateForm()
     if request.method == "POST":
         form = CertificateForm(request.POST)
         if form.is_valid():
@@ -478,8 +480,14 @@ def download_certificate(request, uuid):
                 training,
                 image_path,
             )
-    else:
-        form = CertificateForm()
+        else:
+            messages.warning(request, "Your form submission is not valid.")
+            return render(
+                request,
+                "events/download_certificate.html",
+                {"form": form, "training": training},
+            )
+
     return render(
         request,
         "events/download_certificate.html",

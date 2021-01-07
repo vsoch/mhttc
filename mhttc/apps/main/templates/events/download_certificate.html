@@ -4,7 +4,8 @@
     <h2>Download Training Certificate</h2>
     <small>You have completed the training "{{ training.name }}." Fill in your name and email to download your certificate.</small>
     <hr>
-    <form method="POST" class="post-form">{% csrf_token %}
+    <form method="POST" class="post-form">
+        {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save btn btn-default">Generate</button>
     </form>
